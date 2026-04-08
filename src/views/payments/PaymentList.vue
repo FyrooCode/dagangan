@@ -189,7 +189,7 @@
               <span v-if="!submitting">Terima Rp {{ formatNumber(calculateFinalAmount(selectedShipment)) }}</span>
               <span v-else class="spinner-border spinner-border-sm"></span>
             </button>
-            <button v-else @click="cancelPayment" class="btn btn-lg btn-light-danger fw-bold w-100 py-4 shadow-sm" :disabled="submitting">
+            <button v-if="false" @click="cancelPayment" class="btn btn-lg btn-light-danger fw-bold w-100 py-4 shadow-sm" :disabled="submitting">
               <i class="ki-outline ki-trash fs-3 me-2 text-danger"></i> Batalkan Pelunasan
             </button>
             <button class="btn btn-lg btn-secondary fw-bold w-100 py-4 mt-2 shadow-sm" data-bs-dismiss="modal" style="background-color: #e4e6ef; color: #3f4254; border: none;">

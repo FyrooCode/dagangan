@@ -68,7 +68,7 @@
           </div>
           </div>
         <div class="d-flex align-items-center">
-          <div class="btn btn-icon btn-color-gray-600 btn-active-color-primary ms-n3 me-2 d-flex d-lg-none" id="kt_app_sidebar_toggle">
+          <div class="btn btn-icon btn-color-gray-600 btn-active-color-primary ms-n3 me-2 d-none" id="kt_app_sidebar_toggle">
             <i class="ki-outline ki-abstract-14 fs-2"></i>
           </div>
           <router-link to="/" class="d-flex d-lg-none align-items-center">
