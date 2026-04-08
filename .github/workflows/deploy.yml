@@ -1,0 +1,35 @@
+name: Deploy Dagangan to STB
+
+on:
+  push:
+    branches:
+      - main  # Robot cuma jalan kalau kita update branch main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+
+    - name: Install & Build
+      run: |
+        npm install
+        npm run build
+
+    - name: Deploy to STB via SCP
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "dist/*"
+        target: "/www/wwwroot/dagangan.abelkarbel.tech/"
+        strip_components: 1
