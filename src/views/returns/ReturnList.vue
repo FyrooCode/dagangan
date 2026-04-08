@@ -57,9 +57,9 @@
                   <span class="badge badge-light-dark fw-bold">#{{ s.id.substring(0, 5).toUpperCase() }}</span>
                 </div>
                 
-                <span v-if="activeTab === 'queue'" class="badge badge-light-danger fw-bolder px-3 py-1 text-uppercase">Belum Input Sisa</span>
-                <span v-else-if="activeTab === 'active'" class="badge badge-light-warning fw-bolder px-3 py-1 text-uppercase">Proses</span>
-                <span v-else class="badge badge-light-success fw-bolder px-3 py-1 text-uppercase">Selesai</span>
+                <span v-if="activeTab === 'queue'" class="badge badge-danger fw-bolder px-3 py-1 text-white text-uppercase">Belum Input Sisa</span>
+                <span v-else-if="activeTab === 'active'" class="badge badge-warning fw-bolder px-3 py-1 text-white">SISA {{ getTotalSisaItemCount(s) }}</span>
+                <span v-else-if="activeTab === 'closed'" class="badge badge-success fw-bolder px-3 py-1 text-white">LUNAS</span>
               </div>
 
               <div class="d-flex align-items-center mb-5">
@@ -155,7 +155,7 @@
                 </div>
               </template>
 
-              <template v-else-if="selectedShipment?.total_retur_nominal > 0">
+              <template v-else-if="selectedShipment?.returns?.length > 0">
                 <div class="separator separator-dashed my-3"></div>
                 <div class="d-flex justify-content-between text-danger mb-3">
                   <span class="fs-8 fw-bold text-uppercase">Total Sisa Barang:</span>
@@ -163,9 +163,14 @@
                 </div>
 
                 <div class="text-start bg-white rounded-2 p-4 mb-4 border border-gray-200">
-                  <div v-for="item in selectedShipment.list_sisa" :key="item.name" class="fs-6 text-gray-800 d-flex justify-content-between mb-2">
-                    <span class="fw-semibold">{{ item.name }} ({{ item.qty }} {{ item.unit }})</span>
-                    <span class="fw-bolder">Rp {{ formatNumber(item.nominal) }}</span>
+                  <div v-if="selectedShipment.list_sisa?.length > 0">
+                    <div v-for="item in selectedShipment.list_sisa" :key="item.name" class="fs-6 text-gray-800 d-flex justify-content-between mb-2">
+                      <span class="fw-semibold">{{ item.name }} ({{ item.qty }} {{ item.unit }})</span>
+                      <span class="fw-bolder">Rp {{ formatNumber(item.nominal) }}</span>
+                    </div>
+                  </div>
+                  <div v-else class="text-center text-muted fs-8 fw-bold">
+                    Tidak ada barang sisa
                   </div>
                 </div>
 
@@ -175,7 +180,7 @@
                 </div>
               </template>
 
-              <template v-else-if="activeTab !== 'queue' && activeTab !== 'closed'">
+              <template v-else-if="activeTab === 'active'">
                 <div class="separator separator-dashed my-3"></div>
                 <div class="bg-light-danger rounded-3 p-4 border border-dashed border-danger">
                   <div class="d-flex align-items-center">
@@ -334,6 +339,10 @@ async function handleDelete(id: string) {
     await loadData()
     actionModal.hide()
   }
+}
+
+const getTotalSisaItemCount = (s: any) => {
+  return s.list_sisa?.reduce((sum: number, item: any) => sum + (item.qty || 0), 0) || 0
 }
 
 const formatDate = (d: any) => d ? new Date(d).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'

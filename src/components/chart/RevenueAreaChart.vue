@@ -6,8 +6,8 @@
         <span class="text-muted mt-1 fw-semibold fs-7">Statistik pendapatan harian</span>
       </h3>
     </div>
-    <div class="card-body p-0 pb-5" style="flex: 1; display: flex; flex-direction: column;">
-      <div id="revenue_area_chart" style="width: 100%; flex: 1;"></div>
+    <div class="card-body p-0 pb-5">
+      <div id="revenue_area_chart" style="width: 100%; height: 350px;"></div>
     </div>
   </div>
 </template>
@@ -36,7 +36,7 @@ const renderChart = () => {
     }],
     chart: {
       type: 'area',
-      height: '100%',
+      height: 350,
       width: '100%',
       toolbar: { show: false },
       parentHeightOffset: 0
