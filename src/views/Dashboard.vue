@@ -1,4 +1,17 @@
 <template>
+  <div id="kt_app_toolbar" class="app-toolbar py-4">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+      <div class="d-flex align-items-center">
+        <router-link to="/" class="btn btn-sm btn-icon btn-primary me-3 shadow-sm">
+          <i class="ki-outline ki-arrow-left fs-2 text-white"></i>
+        </router-link>
+        <h1 class="text-gray-900 fw-bolder fs-2 mb-0">Dashboard</h1>
+      </div>
+    </div>
+  </div>
+
+  <div id="kt_app_content" class="app-content flex-column-fluid pt-0">
+    <div id="kt_app_content_container" class="app-container container-xxl">
   <div v-if="loading" class="d-flex flex-column flex-center py-20">
     <span class="spinner-border text-primary"></span>
   </div>
@@ -58,6 +71,8 @@
       <div class="col-12">
         <AllProductQtyChart :data="allProductQty" />
       </div>
+    </div>
+    </div>
     </div>
   </div>
 </template>
