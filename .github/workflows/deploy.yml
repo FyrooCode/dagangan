@@ -3,7 +3,7 @@ name: Deploy Dagangan to STB
 on:
   push:
     branches:
-      - main  # Robot cuma jalan kalau kita update branch main
+      - main  # Robot akan jalan setiap kali kamu push ke main
 
 jobs:
   build-and-deploy:
@@ -19,9 +19,17 @@ jobs:
         node-version: 20
         cache: 'npm'
 
+    - name: Install cloudflared
+      run: |
+        curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+        sudo dpkg -i cloudflared.deb
+
     - name: Install & Build
       run: |
         npm install
+        # Membuat file .env otomatis dari GitHub Secrets
+        echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" > .env
+        echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> .env
         npm run build
 
     - name: Deploy to STB via SCP
@@ -30,6 +38,8 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
+        # Gunakan cloudflared sebagai jembatan SSH
+        proxy_command: "cloudflared access ssh --hostname ${{ secrets.SSH_HOST }}"
         source: "dist/*"
         target: "/www/wwwroot/dagangan.abelkarbel.tech/"
         strip_components: 1
