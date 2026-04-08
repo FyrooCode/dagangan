@@ -1,80 +1,121 @@
 <template>
-  <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-0">
-    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap gap-2">
-      <div class="page-title d-flex flex-column justify-content-center me-3">
-        <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Manajemen Pembayaran</h1>
+  <div id="kt_app_toolbar" class="app-toolbar py-4">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+      <div class="d-flex align-items-center">
+        <router-link to="/" class="btn btn-sm btn-icon btn-warning me-3 shadow-sm">
+          <i class="ki-outline ki-arrow-left fs-2 text-white"></i>
+        </router-link>
+        <h1 class="text-gray-900 fw-bolder fs-2 mb-0">Manajemen Pembayaran</h1>
       </div>
     </div>
   </div>
 
-  <div id="kt_app_content" class="app-content flex-column-fluid pb-20">
+  <div id="kt_app_content" class="app-content flex-column-fluid pt-0">
     <div id="kt_app_content_container" class="app-container container-xxl">
-      <div class="d-flex flex-stack mb-5 border-bottom border-gray-200">
-        <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
-          <li class="nav-item">
-            <a class="nav-link text-active-primary py-5 me-10 cursor-pointer" :class="{active: activeTab === 'unpaid'}" @click="activeTab = 'unpaid'">
-              Belum Lunas <span class="badge badge-light-danger ms-2">{{ unpaidShipments.length }}</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-active-primary py-5 cursor-pointer" :class="{active: activeTab === 'paid'}" @click="activeTab = 'paid'">
-              Sudah Lunas
-            </a>
-          </li>
-        </ul>
+      
+      <div class="p-1 bg-gray-100 rounded-pill d-flex mb-8 shadow-sm border border-gray-200" style="height: 52px;">
+        <button 
+          @click="activeTab = 'unpaid'"
+          class="btn flex-grow-1 d-flex align-items-center justify-content-center fw-bolder fs-7 transition-all rounded-pill border-0"
+          :class="activeTab === 'unpaid' ? 'bg-warning text-white shadow' : 'text-gray-600'"
+        >
+          Belum Lunas
+          <span class="badge ms-2" :class="activeTab === 'unpaid' ? 'badge-light text-warning' : 'badge-light-dark'">
+            {{ unpaidShipments.length }}
+          </span>
+        </button>
+        <button 
+          @click="activeTab = 'paid'"
+          class="btn flex-grow-1 d-flex align-items-center justify-content-center fw-bolder fs-7 transition-all rounded-pill border-0"
+          :class="activeTab === 'paid' ? 'bg-success text-white shadow' : 'text-gray-600'"
+        >
+          Sudah Lunas
+          <span class="badge ms-2" :class="activeTab === 'paid' ? 'badge-light text-success' : 'badge-light-dark'">
+            {{ paidShipments.length }}
+          </span>
+        </button>
       </div>
 
-      <div class="card card-flush">
-        <div class="card-header align-items-center py-5 gap-2">
-          <div class="card-title">
-            <div class="d-flex align-items-center position-relative my-1">
-              <i class="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i>
-              <input type="text" v-model="searchQuery" class="form-control form-control-solid w-250px ps-12" placeholder="Cari Toko..." />
+      <div v-if="loading" class="text-center py-20">
+        <span class="spinner-border text-warning"></span>
+        <div class="text-gray-500 mt-3 fw-bold">Memproses data pembayaran...</div>
+      </div>
+
+      <div v-else class="row g-5">
+        <div v-for="shipment in filteredList" :key="shipment.id" class="col-12 col-md-6 col-xl-4">
+          <div class="card card-flush h-100 border border-gray-200 shadow-sm cursor-pointer card-hover" @click="openPayModal(shipment)">
+            <div class="card-body p-5">
+              <div class="d-flex justify-content-between align-items-start mb-4">
+                <span class="badge badge-light-dark fw-bold">#{{ shipment.id.substring(0, 5).toUpperCase() }}</span>
+                <div class="d-flex gap-2">
+                  <span v-if="shipment.total_retur_nominal > 0" class="badge badge-light-danger fw-bold">ADA SISA</span>
+                  <span v-if="shipment.status === 'paid'" class="badge badge-success fw-bolder px-3 py-1">LUNAS</span>
+                  <span v-else class="badge badge-light-warning fw-bolder px-3 py-1 text-uppercase">Belum Bayar</span>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center mb-5">
+                <div class="symbol symbol-40px symbol-circle me-3">
+                  <div class="symbol-label fs-4 bg-light-warning text-warning fw-bolder">{{ shipment.partners?.name.charAt(0) }}</div>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="fs-6 fw-bolder text-gray-900 mb-0">{{ shipment.partners?.name }}</span>
+                  <span class="text-muted fs-7 text-truncate w-150px">{{ shipment.partners?.address || '-' }}</span>
+                </div>
+              </div>
+              
+              <div class="separator separator-dashed my-4"></div>
+              
+              <div class="d-flex flex-column gap-2 mt-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-gray-400 fs-9 fw-bold text-uppercase">Total Kirim</span>
+                  <span class="fs-6 fw-bolder text-gray-800">Rp {{ formatNumber(shipment.total_amount) }}</span>
+                </div>
+                <div v-if="shipment.total_retur_nominal > 0" class="d-flex justify-content-between align-items-center">
+                  <span class="text-gray-400 fs-9 fw-bold text-uppercase">Potongan Sisa</span>
+                  <span class="fs-6 fw-bolder text-danger">- Rp {{ formatNumber(shipment.total_retur_nominal) }}</span>
+                </div>
+                <div v-if="shipment.status === 'paid'" class="d-flex justify-content-between align-items-center">
+                  <span class="text-gray-400 fs-9 fw-bold text-uppercase">Diterima</span>
+                  <span class="fs-6 fw-bolder text-success">Rp {{ formatNumber(shipment.total_received) }}</span>
+                </div>
+              </div>
+
+              <div class="separator separator-dashed my-4"></div>
+
+              <div v-if="shipment.status === 'paid'" class="bg-light-primary rounded-2 p-3 border border-dashed border-primary mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-primary fs-8 fw-bold text-uppercase">Tanggal Kirim:</span>
+                  <span class="text-gray-800 fs-7 fw-bolder">{{ formatDate(shipment.shipment_date) }}</span>
+                </div>
+              </div>
+
+              <div v-if="shipment.status === 'paid'" class="bg-light-success rounded-2 p-3 border border-dashed border-success mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-success fs-8 fw-bold text-uppercase">Tanggal Lunas:</span>
+                  <span class="text-gray-800 fs-7 fw-bolder">{{ formatDate(shipment.tgl_lunas) }}</span>
+                </div>
+              </div>
+
+              <div v-if="shipment.status === 'pending'" class="bg-light-primary rounded-2 p-3 border border-dashed border-primary mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-primary fs-8 fw-bold text-uppercase">Tanggal Kirim:</span>
+                  <span class="text-gray-800 fs-7 fw-bolder">{{ formatDate(shipment.shipment_date) }}</span>
+                </div>
+              </div>
+
+              <div class="bg-light-warning rounded-2 p-3 border border-dashed border-warning">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-warning fs-8 fw-bold text-uppercase">Wajib Setor:</span>
+                  <span class="text-gray-800 fs-5 fw-bolder">Rp {{ formatNumber(calculateFinalAmount(shipment)) }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="card-body pt-0">
-          <div class="table-responsive">
-            <table class="table align-middle table-row-dashed fs-6 gy-5">
-              <thead>
-                <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                  <th class="min-w-100px">ID Nota</th>
-                  <th class="min-w-175px">Partner</th>
-                  <th class="text-end min-w-70px">Status</th>
-                  <th class="text-end min-w-120px">Wajib Setor</th>
-                  <th class="text-end min-w-100px">Aksi</th>
-                </tr>
-              </thead>
-              <tbody class="fw-semibold text-gray-600">
-                <tr v-if="loading"><td colspan="5" class="text-center py-10"><span class="spinner-border"></span></td></tr>
-                <tr v-else v-for="s in filteredList" :key="s.id" class="cursor-pointer bg-hover-light" @click="openPayModal(s)">
-                  <td>#{{ s.id.substring(0, 5).toUpperCase() }}</td>
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <div class="symbol symbol-30px me-3">
-                        <div class="symbol-label bg-light-success text-success fw-bold">{{ s.partners?.name?.charAt(0) }}</div>
-                      </div>
-                      <span class="text-gray-900 fw-bold">{{ s.partners?.name }}</span>
-                    </div>
-                  </td>
-                  <td class="text-end">
-                    <span :class="getStatusBadge(s.status)">
-                      {{ s.status === 'paid' ? 'LUNAS' : 'PENDING' }}
-                    </span>
-                  </td>
-                  <td class="text-end text-gray-900 fw-bolder">Rp {{ formatNumber(calculateFinalAmount(s)) }}</td>
-                  <td class="text-end">
-                    <div class="d-flex justify-content-end gap-2">
-                      <button class="btn btn-sm btn-icon btn-light-primary"><i class="ki-outline ki-pencil fs-5"></i></button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="!loading && filteredList.length === 0">
-                  <td colspan="5" class="text-center text-muted py-10">Data tidak ditemukan.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+
+        <div v-if="filteredList.length === 0" class="col-12 text-center py-20 bg-light rounded border border-dashed border-gray-400">
+          <div class="text-gray-600 fw-bold fs-6">Tidak ada data di kategori ini.</div>
         </div>
       </div>
     </div>
@@ -82,30 +123,35 @@
 
   <div class="modal fade" id="modal_pay_action" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered mw-450px">
-      <div class="modal-content border-0">
-        <div class="modal-header border-0 justify-content-end pb-0">
-          <div class="btn btn-icon btn-sm btn-active-light-primary" data-bs-dismiss="modal"><i class="ki-outline ki-cross fs-1"></i></div>
-        </div>
-
-        <div class="modal-body scroll-y px-10 pt-0 pb-15">
-          <div class="text-center mb-8">
-            <h1 class="mb-3 text-gray-900">{{ selectedShipment?.status === 'paid' ? 'Detail Pembayaran' : 'Konfirmasi Pembayaran' }}</h1>
-            <div class="text-gray-800 fw-bolder fs-3">{{ selectedShipment?.partners?.name }}</div>
-          </div>
-
-          <div class="bg-light rounded p-5 mb-8 border border-dashed border-gray-400">
-            <div class="d-flex flex-stack mb-2">
-              <span class="text-muted fw-bold fs-7">Total Kirim:</span>
-              <span class="text-gray-800 fw-bold">Rp {{ formatNumber(selectedShipment?.total_amount) }}</span>
-            </div>
-            <div v-if="calculateReturnSummary(selectedShipment).totalDeduction > 0" class="d-flex flex-stack mb-2">
-              <span class="text-danger fw-bold fs-7">Potongan Sisa:</span>
-              <span class="text-danger fw-bolder">- Rp {{ formatNumber(calculateReturnSummary(selectedShipment).totalDeduction) }}</span>
-            </div>
-            <div class="separator border-gray-300 my-3"></div>
-            <div class="d-flex flex-stack">
-              <span class="text-gray-900 fw-bolder fs-5">Wajib Setor:</span>
-              <span class="text-success fw-bolder fs-2">Rp {{ formatNumber(calculateFinalAmount(selectedShipment)) }}</span>
+      <div class="modal-content border-0 rounded-4 shadow-lg">
+        <div class="modal-body p-10">
+          <div class="text-center mb-6">
+            <h1 class="mb-1 text-gray-900 fs-3 fw-bolder">{{ selectedShipment?.partners?.name }}</h1>
+            <div class="badge badge-light-dark mb-4">Nota #{{ selectedShipment?.id.substring(0, 5).toUpperCase() }}</div>
+            
+            <div class="bg-light rounded-3 p-4 border border-dashed border-gray-300">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted fs-8 fw-bold text-uppercase">Tanggal Kirim:</span>
+                <span class="text-gray-800 fs-7 fw-bolder">{{ formatDate(selectedShipment?.shipment_date) }}</span>
+              </div>
+              <div v-if="selectedShipment?.status === 'paid'" class="d-flex justify-content-between mb-2">
+                <span class="text-success fs-8 fw-bold text-uppercase">Tanggal Lunas:</span>
+                <span class="text-gray-800 fs-7 fw-bolder">{{ formatDate(selectedShipment?.tgl_lunas) }}</span>
+              </div>
+              <div class="separator separator-dashed my-3"></div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted fs-8 fw-bold text-uppercase">Total Kirim:</span>
+                <span class="text-gray-800 fs-7 fw-bolder">Rp {{ formatNumber(selectedShipment?.total_amount) }}</span>
+              </div>
+              <div v-if="calculateReturnSummary(selectedShipment).totalDeduction > 0" class="d-flex justify-content-between mb-2">
+                <span class="text-danger fs-8 fw-bold text-uppercase">Potongan Sisa:</span>
+                <span class="text-danger fs-7 fw-bolder">- Rp {{ formatNumber(calculateReturnSummary(selectedShipment).totalDeduction) }}</span>
+              </div>
+              <div class="separator separator-dashed my-3"></div>
+              <div class="d-flex justify-content-between">
+                <span class="text-gray-900 fw-bold fs-8 text-uppercase">Wajib Setor:</span>
+                <span class="text-success fw-bolder fs-5">Rp {{ formatNumber(calculateFinalAmount(selectedShipment)) }}</span>
+              </div>
             </div>
           </div>
 
@@ -140,12 +186,15 @@
           <div class="d-flex flex-column gap-3">
             <button v-if="selectedShipment?.status === 'pending'" @click="confirmPayment" 
               class="btn btn-lg btn-success fw-bold w-100 py-4 shadow-sm" :disabled="submitting">
-              Terima Rp {{ formatNumber(calculateFinalAmount(selectedShipment)) }}
+              <span v-if="!submitting">Terima Rp {{ formatNumber(calculateFinalAmount(selectedShipment)) }}</span>
+              <span v-else class="spinner-border spinner-border-sm"></span>
             </button>
             <button v-else @click="cancelPayment" class="btn btn-lg btn-light-danger fw-bold w-100 py-4 shadow-sm" :disabled="submitting">
-              Batalkan Pelunasan
+              <i class="ki-outline ki-trash fs-3 me-2 text-danger"></i> Batalkan Pelunasan
             </button>
-            <button class="btn btn-lg btn-light fw-bold w-100 py-4" data-bs-dismiss="modal">Tutup</button>
+            <button class="btn btn-lg btn-secondary fw-bold w-100 py-4 mt-2 shadow-sm" data-bs-dismiss="modal" style="background-color: #e4e6ef; color: #3f4254; border: none;">
+              Tutup
+            </button>
           </div>
         </div>
       </div>
@@ -160,7 +209,6 @@ import { paymentService } from '@/services/PaymentService'
 const shipments = ref<any[]>([])
 const loading = ref(true)
 const submitting = ref(false)
-const searchQuery = ref('')
 const activeTab = ref('unpaid')
 const selectedShipment = ref<any>(null)
 let payModal: any = null
@@ -201,10 +249,7 @@ function calculateFinalAmount(shipment: any) {
 
 const unpaidShipments = computed(() => shipments.value.filter(s => s.status === 'pending'))
 const paidShipments = computed(() => shipments.value.filter(s => s.status === 'paid'))
-const filteredList = computed(() => {
-  const list = activeTab.value === 'unpaid' ? unpaidShipments.value : paidShipments.value
-  return list.filter(s => s.partners?.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
-})
+const filteredList = computed(() => activeTab.value === 'unpaid' ? unpaidShipments.value : paidShipments.value)
 
 const openPayModal = (s: any) => {
   selectedShipment.value = s
@@ -235,6 +280,7 @@ async function cancelPayment() {
 
 const getStatusBadge = (status: string) => status === 'paid' ? 'badge badge-light-success fw-bold' : 'badge badge-light-warning fw-bold'
 const formatNumber = (n: any) => new Intl.NumberFormat('id-ID').format(n || 0)
+const formatDate = (d: any) => d ? new Date(d).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'
 
 onMounted(() => {
   loadData()
@@ -244,5 +290,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.bg-hover-light:hover { background-color: var(--bs-light) !important; transition: background-color 0.2s ease; }
+.transition-all { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.card-hover { transition: transform 0.15s ease-in-out; }
+.card-hover:active { transform: scale(0.97); background-color: #f9f9f9; }
+.btn:focus { box-shadow: none !important; }
 </style>

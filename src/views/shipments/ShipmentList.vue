@@ -1,111 +1,93 @@
 <template>
-  <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-0">
-    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap gap-2">
-      <div class="page-title d-flex flex-column justify-content-center me-3">
-        <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Daftar Pengiriman</h1>
-        <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-          <li class="breadcrumb-item text-muted"><router-link to="/" class="text-muted text-hover-primary">Home</router-link></li>
-          <li class="breadcrumb-item"><span class="bullet bg-gray-500 w-5px h-2px"></span></li>
-          <li class="breadcrumb-item text-muted">Penjualan</li>
-        </ul>
-      </div>
-      <div class="d-flex align-items-center gap-2 gap-lg-3">
-        <router-link to="/shipments/create" class="btn btn-sm fw-bold btn-primary">
-          <i class="ki-outline ki-plus fs-4 me-1"></i> Buat Pengiriman
+  <div id="kt_app_toolbar" class="app-toolbar py-4">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+      <div class="d-flex align-items-center">
+        <router-link to="/" class="btn btn-sm btn-icon btn-primary me-3 shadow-sm">
+          <i class="ki-outline ki-arrow-left fs-2 text-white"></i>
         </router-link>
+        <h1 class="text-gray-900 fw-bolder fs-2 mb-0">Pengiriman</h1>
       </div>
+      <router-link to="/shipments/create" class="btn btn-primary fw-bold shadow-sm px-5">
+        <i class="ki-outline ki-plus fs-2"></i> Baru
+      </router-link>
     </div>
   </div>
 
-  <div id="kt_app_content" class="app-content flex-column-fluid">
+  <div id="kt_app_content" class="app-content flex-column-fluid pt-0">
     <div id="kt_app_content_container" class="app-container container-xxl">
       
-      <div class="d-flex flex-stack mb-5 border-bottom border-gray-200">
-        <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
-          <li class="nav-item">
-            <a class="nav-link text-active-primary py-5 me-10 cursor-pointer" :class="{active: activeTab === 'active'}" @click="activeTab = 'active'">
-              Nota Aktif <span class="badge badge-light-danger ms-2">{{ activeShipments.length }}</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-active-primary py-5 cursor-pointer" :class="{active: activeTab === 'completed'}" @click="activeTab = 'completed'">
-              Selesai (Lunas)
-            </a>
-          </li>
-        </ul>
+      <div class="p-1 bg-gray-100 rounded-pill d-flex mb-8 shadow-sm border border-gray-200" style="height: 52px;">
+        <button @click="activeTab = 'active'" class="btn flex-grow-1 d-flex align-items-center justify-content-center fw-bolder fs-6 transition-all rounded-pill border-0" :class="activeTab === 'active' ? 'bg-primary text-white shadow' : 'text-gray-600'">
+          Nota Aktif
+          <span class="badge ms-2" :class="activeTab === 'active' ? 'badge-light text-primary' : 'badge-light-dark'">
+            {{ activeShipments.length }}
+          </span>
+        </button>
+        <button @click="activeTab = 'completed'" class="btn flex-grow-1 d-flex align-items-center justify-content-center fw-bolder fs-6 transition-all rounded-pill border-0" :class="activeTab === 'completed' ? 'bg-success text-white shadow' : 'text-gray-600'">
+          Selesai
+        </button>
       </div>
 
-      <div class="card card-flush">
-        <div class="card-header align-items-center py-5 gap-2 gap-md-5">
-          <div class="card-title">
-            <div class="d-flex align-items-center position-relative my-1">
-              <i class="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i>
-              <input type="text" v-model="searchQuery" class="form-control form-control-solid w-250px ps-12" placeholder="Cari Nota/Partner..." />
-            </div>
-          </div>
-        </div>
+      <div v-if="loading" class="text-center py-20"><span class="spinner-border text-primary"></span></div>
 
-        <div class="card-body pt-0">
-          <div class="table-responsive">
-            <table class="table align-middle table-row-dashed fs-6 gy-5">
-              <thead>
-                <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                  <th class="min-w-100px">ID Nota</th>
-                  <th class="min-w-175px">Partner / Toko</th>
-                  <th class="text-end min-w-125px">Total Tagihan</th>
-                  <th class="text-end min-w-150px">Tanggal Kirim</th>
-                  <th class="text-end min-w-100px">Aksi</th>
-                </tr>
-              </thead>
-              <tbody class="fw-semibold text-gray-600">
-                <tr v-if="loading">
-                  <td colspan="5" class="text-center py-10">
-                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span> Memuat data...
-                  </td>
-                </tr>
-                <tr v-else v-for="shipment in filteredShipments" :key="shipment.id" 
-                  class="cursor-pointer bg-hover-light" @click="openQuickModal(shipment)">
-                  <td>
-                    <span class="text-gray-800 fw-bold">#{{ shipment.id.substring(0, 5).toUpperCase() }}</span>
-                  </td>
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <div class="symbol symbol-circle symbol-35px overflow-hidden me-3">
-                        <div class="symbol-label fs-8 bg-light-info text-info fw-bold">
-                          {{ shipment.partners?.name.charAt(0) }}
-                        </div>
-                      </div>
-                      <div class="d-flex flex-column">
-                        <span class="text-gray-800 fw-bold text-hover-primary">{{ shipment.partners?.name }}</span>
-                        <span class="text-muted fs-7 text-truncate" style="max-width: 150px;">{{ shipment.partners?.address || 'Tanpa Alamat' }}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="text-end pe-0 text-gray-900 fw-bolder">
-                    Rp {{ formatNumber(shipment.total_amount) }}
-                  </td>
-                  <td class="text-end pe-0">
-                    <div class="text-gray-800">{{ formatDate(shipment.shipment_date) }}</div>
-                    <div class="text-muted fs-8">Tempo: {{ formatDate(shipment.expected_payment_date) }}</div>
-                  </td>
-                  <td class="text-end">
-                    <div class="d-flex justify-content-end gap-2">
-                      <router-link v-if="shipment.status !== 'paid'" :to="`/shipments/edit/${shipment.id}`" @click.stop 
-                        class="btn btn-sm btn-icon btn-light-primary">
-                        <i class="ki-outline ki-pencil fs-5"></i>
-                      </router-link>
-                      <button v-if="shipment.status !== 'paid'" @click.stop="handleDelete(shipment.id)" class="btn btn-sm btn-icon btn-light-danger">
-                        <i class="ki-outline ki-trash fs-5"></i>
-                      </button>
-                      <span v-else class="badge badge-light-success fw-bold">LUNAS</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="!loading && filteredShipments.length === 0">
-                  <td colspan="5" class="text-center text-muted py-10">Data pengiriman tidak ditemukan.</td>
-                </tr>
-              </tbody>
-            </table>
+      <div v-else class="row g-5">
+        <div v-for="shipment in filteredShipments" :key="shipment.id" class="col-12 col-md-6 col-xl-4">
+          <div class="card card-flush h-100 border border-gray-200 shadow-sm cursor-pointer card-hover" @click="openQuickModal(shipment)">
+            <div class="card-body p-5">
+              <div class="d-flex justify-content-between align-items-start mb-4">
+                <span class="badge badge-light-dark fw-bold">#{{ shipment.id.substring(0, 5).toUpperCase() }}</span>
+                <div class="d-flex gap-2">
+                   <span v-if="shipment.total_retur_nominal > 0 && shipment.status !== 'paid'" class="badge badge-light-success fw-bold">SISA OK</span>
+                  <span v-if="shipment.status === 'paid'" class="badge badge-success fw-bolder px-3 py-1">LUNAS</span>
+                  <span v-else class="badge badge-light-danger fw-bolder px-3 py-1 text-uppercase">Belum Bayar</span>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center mb-5">
+                <div class="symbol symbol-40px symbol-circle me-3">
+                  <div class="symbol-label fs-4 bg-light-primary text-primary fw-bolder">{{ shipment.partners?.name.charAt(0) }}</div>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="fs-6 fw-bolder text-gray-900 mb-0">{{ shipment.partners?.name }}</span>
+                  <span class="text-muted fs-7 text-truncate w-150px">{{ shipment.partners?.address || '-' }}</span>
+                </div>
+              </div>
+              
+              <div class="separator separator-dashed my-4"></div>
+              
+              <div class="d-flex flex-column gap-2 mt-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-gray-400 fs-9 fw-bold text-uppercase">Total Tagihan</span>
+                  <span class="fs-6 fw-bolder text-gray-800">Rp {{ formatNumber(shipment.total_amount) }}</span>
+                </div>
+                <div v-if="shipment.status === 'paid'" class="d-flex justify-content-between align-items-center">
+                  <span class="text-gray-400 fs-9 fw-bold text-uppercase">Diterima</span>
+                  <span class="fs-6 fw-bolder text-success">Rp {{ formatNumber(shipment.total_received) }}</span>
+                </div>
+              </div>
+
+              <div class="separator separator-dashed my-4"></div>
+
+              <div v-if="shipment.status === 'paid'" class="bg-light-primary rounded-2 p-3 border border-dashed border-primary mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-primary fs-8 fw-bold text-uppercase">Tanggal Kirim:</span>
+                  <span class="text-gray-800 fs-7 fw-bolder">{{ formatDate(shipment.shipment_date) }}</span>
+                </div>
+              </div>
+
+              <div v-if="shipment.status === 'paid'" class="bg-light-success rounded-2 p-3 border border-dashed border-success">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-success fs-8 fw-bold text-uppercase">Tanggal Lunas:</span>
+                  <span class="text-gray-800 fs-7 fw-bolder">{{ formatDate(shipment.tgl_lunas) }}</span>
+                </div>
+              </div>
+              <div v-else class="bg-light-warning rounded-2 p-3 border border-dashed border-warning">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-warning fs-8 fw-bold text-uppercase">Perkiraan Masuk:</span>
+                  <span class="text-gray-800 fs-7 fw-bolder">{{ formatDate(shipment.expected_payment_date) }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -113,55 +95,83 @@
   </div>
 
   <div class="modal fade" id="modal_shipment_action" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mw-400px">
-      <div class="modal-content border-0">
-        <div class="modal-header border-0 justify-content-end pb-0">
-          <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal">
-            <i class="ki-outline ki-cross fs-1"></i>
-          </div>
-        </div>
-
-        <div class="modal-body scroll-y px-10 pt-0 pb-15">
-          <div class="text-center mb-8">
-            <h1 class="mb-3 text-gray-900">Opsi Pengiriman</h1>
-            <div class="text-muted fw-semibold fs-5 mb-1">Nota #{{ selectedShipment?.id.substring(0, 5).toUpperCase() }}</div>
-            <div class="text-gray-800 fw-bolder fs-3">{{ selectedShipment?.partners?.name }}</div>
-          </div>
-
-          <div class="bg-light rounded p-4 mb-8 border border-dashed border-gray-400">
-            <div class="d-flex align-items-center mb-3">
-              <i class="ki-outline ki-calendar fs-2 text-primary me-3"></i>
-              <div class="d-flex flex-column">
-                <span class="text-muted fs-8 fw-bold text-uppercase">Tanggal Kirim</span>
-                <span class="text-gray-800 fw-bold">{{ formatDate(selectedShipment?.shipment_date) }}</span>
+    <div class="modal-dialog modal-dialog-centered mw-375px">
+      <div class="modal-content rounded-4 border-0 shadow-lg">
+        <div class="modal-body p-10">
+          <div class="text-center mb-6">
+            <h1 class="mb-1 text-gray-900 fs-3 fw-bolder">{{ selectedShipment?.partners?.name }}</h1>
+            <div class="badge badge-light-dark mb-4">Nota #{{ selectedShipment?.id.substring(0, 5).toUpperCase() }}</div>
+            
+            <div class="bg-light rounded-3 p-4 border border-dashed border-gray-300">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted fs-8 fw-bold text-uppercase">Tgl Kirim:</span>
+                <span class="text-gray-800 fs-7 fw-bolder">{{ formatDate(selectedShipment?.shipment_date) }}</span>
               </div>
-            </div>
-            <div class="d-flex align-items-center">
-              <i class="ki-outline ki-wallet fs-2 text-success me-3"></i>
-              <div class="d-flex flex-column">
-                <span class="text-muted fs-8 fw-bold text-uppercase">Total Tagihan</span>
-                <span class="text-gray-900 fw-bolder fs-6">Rp {{ formatNumber(selectedShipment?.total_amount) }}</span>
+              <div class="d-flex justify-content-between mb-1">
+                <span class="text-muted fs-8 fw-bold text-uppercase">Total Tagihan:</span>
+                <span class="text-gray-800 fs-7 fw-bolder">Rp {{ formatNumber(selectedShipment?.total_amount) }}</span>
               </div>
+
+              <template v-if="selectedShipment?.total_retur_nominal > 0">
+                <div class="separator separator-dashed my-3"></div>
+                <div class="d-flex justify-content-between text-danger mb-3">
+                  <span class="fs-8 fw-bold text-uppercase">Total Sisa Barang:</span>
+                  <span class="fs-7 fw-bolder">- Rp {{ formatNumber(selectedShipment?.total_retur_nominal) }}</span>
+                </div>
+
+                <div class="text-start bg-white rounded-2 p-4 mb-4 border border-gray-200">
+                  <div v-for="item in selectedShipment.list_sisa" :key="item.name" class="fs-6 text-gray-800 d-flex justify-content-between mb-2">
+                    <span class="fw-semibold">{{ item.name }} ({{ item.qty }} {{ item.unit }})</span>
+                    <span class="fw-bolder">Rp {{ formatNumber(item.nominal) }}</span>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between bg-light-success p-4 rounded border border-success border-dashed">
+                  <span class="text-success fs-7 fw-bold text-uppercase">Estimasi Terima Bersih:</span>
+                  <span class="text-success fs-5 fw-bolder">Rp {{ formatNumber(selectedShipment?.estimasi_bersih) }}</span>
+                </div>
+              </template>
+
+              <template v-else-if="selectedShipment?.status !== 'paid'">
+                <div class="separator separator-dashed my-3"></div>
+                <div class="bg-light-danger rounded-3 p-4 border border-dashed border-danger">
+                    <div class="d-flex align-items-center">
+                        <i class="ki-outline ki-information-5 fs-1 text-danger me-3"></i>
+                        <div class="text-start">
+                            <div class="text-danger fw-bolder fs-7 text-uppercase">Belum Ada Data Sisa</div>
+                        </div>
+                    </div>
+                </div>
+              </template>
             </div>
           </div>
 
           <div class="d-flex flex-column gap-3">
             <template v-if="selectedShipment?.status !== 'paid'">
-              <router-link :to="`/shipments/edit/${selectedShipment?.id}`" 
-                class="btn btn-lg btn-light-primary fw-bold w-100 py-4 shadow-sm" @click="quickModal.hide()">
-                <i class="ki-outline ki-pencil fs-3 me-2"></i> Edit Rincian Barang
+              <router-link :to="{ path: '/returns', query: { openID: selectedShipment?.id } }" 
+                class="btn btn-lg btn-success fw-bold w-100 py-4 shadow-sm" @click="quickModal.hide()">
+                <i class="ki-outline ki-arrows-loop fs-3 me-2"></i> 
+                {{ selectedShipment?.total_retur_nominal > 0 ? 'Edit Sisa Barang' : 'Input Sisa Barang' }}
               </router-link>
 
-              <button @click="handleDelete(selectedShipment?.id)" class="btn btn-lg btn-light-danger fw-bold w-100 py-4 shadow-sm">
-                <i class="ki-outline ki-trash fs-3 me-2"></i> Hapus Pengiriman
+              <router-link :to="`/shipments/edit/${selectedShipment?.id}`" class="btn btn-lg btn-primary fw-bold w-100 py-4 shadow-sm" @click="quickModal.hide()">
+                <i class="ki-outline ki-pencil fs-3 me-2"></i> Edit Nota
+              </router-link>
+
+              <button @click="handleDelete(selectedShipment?.id)" class="btn btn-lg btn-danger fw-bold w-100 py-4 shadow-sm">
+                <i class="ki-outline ki-trash fs-3 me-2 text-white"></i> Hapus Pengiriman
               </button>
             </template>
-            <div v-else class="alert alert-light-success border-dashed border-success d-flex align-items-center p-5">
-                <i class="ki-outline ki-check-circle fs-2x text-success me-3"></i>
-                <div class="fw-bold">Nota ini sudah lunas. Data terkunci.</div>
+
+            <div v-else class="alert alert-light-success d-flex flex-column align-items-center p-5 text-center">
+                <i class="ki-outline ki-check-circle fs-2hx text-success mb-2"></i>
+                <div class="fw-bold text-success mb-1 text-uppercase">Sudah Lunas</div>
+                <div class="fs-6 text-gray-800 fw-bold">Total Diterima: Rp {{ formatNumber(selectedShipment?.total_received) }}</div>
             </div>
 
-            <button class="btn btn-lg btn-light fw-bold w-100 py-4" data-bs-dismiss="modal">Tutup</button>
+            <button class="btn btn-lg btn-secondary fw-bold w-100 py-4 mt-2 shadow-sm" data-bs-dismiss="modal" style="background-color: #e4e6ef; color: #3f4254; border: none;">
+              Tutup
+            </button>
           </div>
         </div>
       </div>
@@ -176,9 +186,7 @@ import { shipmentService } from '@/services/ShipmentService'
 const shipments = ref<any[]>([])
 const loading = ref(true)
 const activeTab = ref('active')
-const searchQuery = ref('')
 const selectedShipment = ref<any>(null)
-
 let quickModal: any = null
 
 async function fetchShipments() {
@@ -200,38 +208,28 @@ const openQuickModal = (shipment: any) => {
 
 const activeShipments = computed(() => shipments.value.filter(s => s.status !== 'paid'))
 const completedShipments = computed(() => shipments.value.filter(s => s.status === 'paid'))
-
-const filteredShipments = computed(() => {
-  const list = activeTab.value === 'active' ? activeShipments.value : completedShipments.value
-  return list.filter(s => {
-    return s.partners?.name.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
-           s.id.toLowerCase().includes(searchQuery.value.toLowerCase())
-  })
-})
+const filteredShipments = computed(() => activeTab.value === 'active' ? activeShipments.value : completedShipments.value)
 
 const formatNumber = (num: any) => new Intl.NumberFormat('id-ID').format(num || 0)
-const formatDate = (date: string) => {
-  if (!date) return '-'
-  return new Date(date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
-}
+const formatDate = (date: string) => !date ? '-' : new Date(date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
 
 async function handleDelete(id: string) {
   if (quickModal) quickModal.hide()
   // @ts-ignore
-  const res = await Swal.fire({
-    title: 'Hapus data?',
-    text: "Tindakan ini tidak bisa dibatalkan.",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Ya, Hapus',
-    customClass: { confirmButton: 'btn btn-danger', cancelButton: 'btn btn-light' }
+  const res = await Swal.fire({ 
+    title: 'Hapus Pengiriman?', 
+    text: "Semua data terkait (termasuk data sisa) akan ikut terhapus!",
+    icon: 'warning', 
+    showCancelButton: true, 
+    confirmButtonText: 'Ya, Hapus', 
+    customClass: { confirmButton: 'btn btn-danger', cancelButton: 'btn btn-light' } 
   })
   if (res.isConfirmed) {
-    try {
+    try { 
       await shipmentService.delete(id)
-      fetchShipments()
-    } catch (error: any) {
-      alert(error.message)
+      fetchShipments() 
+    } catch (error: any) { 
+      alert(error.message) 
     }
   }
 }
@@ -244,8 +242,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.bg-hover-light:hover {
-  background-color: var(--bs-light) !important;
-  transition: background-color 0.2s ease;
-}
+.transition-all { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.card-hover { transition: transform 0.15s ease-in-out; }
+.card-hover:active { transform: scale(0.97); background-color: #f9f9f9; }
+.btn:focus { box-shadow: none !important; }
 </style>

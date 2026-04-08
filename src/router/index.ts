@@ -13,6 +13,11 @@ const router = createRouter({
       children: [
         {
           path: '',
+          name: 'home',
+          component: () => import('@/views/HomeView.vue'),
+        },
+        {
+          path: 'dashboard',
           name: 'dashboard',
           component: () => import('@/views/Dashboard.vue'),
         },
@@ -26,7 +31,7 @@ const router = createRouter({
           name: 'partners',
           component: () => import('@/views/partners/PartnerList.vue'),
         },
-        // --- Shipments Management (Penjualan) ---
+        // --- Shipments Management ---
         {
           path: 'shipments',
           name: 'shipments',
@@ -42,22 +47,23 @@ const router = createRouter({
           name: 'shipments-edit',
           component: () => import('@/views/shipments/ShipmentForm.vue'),
         },
-        // --- Returns Management (Barang Sisa) ---
+        // --- Returns Management (FIXED) ---
         {
           path: 'returns',
           name: 'returns',
           component: () => import('@/views/returns/ReturnList.vue'),
         },
+        // Pakai :shipmentId? (tanda tanya) agar parameter bersifat opsional
         {
-          path: 'returns/create',
+          path: 'returns/create/:shipmentId?',
           name: 'returns-create',
           component: () => import('@/views/returns/ReturnForm.vue'),
         },
         {
-  path: 'payments',
-  name: 'payments',
-  component: () => import('@/views/payments/PaymentList.vue'),
-},
+          path: 'payments',
+          name: 'payments',
+          component: () => import('@/views/payments/PaymentList.vue'),
+        },
       ],
     },
     {
@@ -74,28 +80,16 @@ const router = createRouter({
   ],
 })
 
-/**
- * Navigation Guard (Modern Style - No next() callback)
- */
 router.beforeEach(async (to) => {
-  // 1. Ambil sesi user
   const { data: { session } } = await supabase.auth.getSession()
-  
-  // 2. Tentukan apakah route butuh login
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
-  // 3. Logika Proteksi dengan Return Value
   if (requiresAuth && !session) {
-    // Jika butuh login tapi ga ada sesi, lempar ke login
     return { name: 'login' }
   }
-
   if (to.name === 'login' && session) {
-    // Jika sudah login tapi mau ke halaman login, balikkan ke dashboard
     return { name: 'dashboard' }
   }
-
-  // Jika tidak ada masalah, biarkan lanjut (default return true)
 })
 
 export default router

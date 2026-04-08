@@ -1,132 +1,119 @@
 <template>
-  <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-0">
-    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap gap-2">
-      <div class="page-title d-flex flex-column justify-content-center me-3">
-        <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Master Partner</h1>
-        <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-          <li class="breadcrumb-item text-muted">
-            <router-link to="/" class="text-muted text-hover-primary">Home</router-link>
-          </li>
-          <li class="breadcrumb-item"><span class="bullet bg-gray-500 w-5px h-2px"></span></li>
-          <li class="breadcrumb-item text-muted">Master Data</li>
-        </ul>
+  <div id="kt_app_toolbar" class="app-toolbar py-4">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+      <div class="d-flex align-items-center">
+        <router-link to="/" class="btn btn-sm btn-icon btn-success me-3 shadow-sm">
+          <i class="ki-outline ki-arrow-left fs-2 text-white"></i>
+        </router-link>
+        <h1 class="text-gray-900 fw-bolder fs-2 mb-0">Master Partner</h1>
       </div>
-      <div class="d-flex align-items-center gap-2 gap-lg-3">
-        <button class="btn btn-sm fw-bold btn-primary" @click="openAddModal">
-          <i class="ki-outline ki-plus fs-4 me-1"></i> Tambah Partner
-        </button>
-      </div>
+      <button class="btn btn-success fw-bold shadow-sm px-5" @click="openAddModal">
+        <i class="ki-outline ki-plus fs-2"></i> Tambah
+      </button>
     </div>
   </div>
 
-  <div id="kt_app_content" class="app-content flex-column-fluid">
+  <div id="kt_app_content" class="app-content flex-column-fluid pt-0">
     <div id="kt_app_content_container" class="app-container container-xxl">
-      <div class="card card-flush">
-        <div class="card-header align-items-center py-5 gap-2 gap-md-5">
-          <div class="card-title w-100 w-md-auto">
-            <div class="d-flex align-items-center position-relative my-1 w-100">
-              <i class="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i>
-              <input type="text" v-model="searchQuery" class="form-control form-control-solid w-100 w-md-250px ps-12" placeholder="Cari Partner..." />
+      
+      <div class="d-flex mb-8">
+        <div class="d-flex align-items-center position-relative">
+          <i class="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i>
+          <input type="text" v-model="searchQuery" class="form-control form-control-solid w-250px ps-12" placeholder="Cari Partner..." />
+        </div>
+      </div>
+
+      <div v-if="loading" class="text-center py-20">
+        <span class="spinner-border text-success"></span>
+        <div class="text-gray-500 mt-3 fw-bold">Memuat data partner...</div>
+      </div>
+
+      <div v-else class="row g-5">
+        <div v-for="item in filteredPartners" :key="item.id" class="col-12 col-md-6 col-xl-4">
+          <div class="card card-flush h-100 border border-gray-200 shadow-sm cursor-pointer card-hover">
+            <div class="card-body p-5">
+              <div class="d-flex align-items-center mb-5">
+                <div class="symbol symbol-40px symbol-circle me-3">
+                  <div class="symbol-label fs-4 bg-light-success text-success fw-bolder">{{ item.name.charAt(0) }}</div>
+                </div>
+                <div class="d-flex flex-column flex-grow-1">
+                  <span class="fs-6 fw-bolder text-gray-900 mb-0">{{ item.name }}</span>
+                  <span class="text-muted fs-7 text-truncate">{{ item.address || '-' }}</span>
+                </div>
+              </div>
+              
+              <div class="separator separator-dashed my-4"></div>
+              
+              <div class="d-flex flex-column gap-2 mt-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-gray-400 fs-9 fw-bold text-uppercase">Markup Fixed</span>
+                  <span class="fs-6 fw-bolder text-gray-800">Rp {{ formatNumber(item.markup_fixed) }}</span>
+                </div>
+              </div>
+
+              <div class="separator separator-dashed my-4"></div>
+
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-flex-md btn-light-success flex-grow-1" @click="openEditModal(item)">
+                  <i class="ki-outline ki-pencil fs-4 me-2"></i> Edit
+                </button>
+                <button class="btn btn-sm btn-flex-md btn-light-danger flex-grow-1" @click="handleDelete(item.id)">
+                  <i class="ki-outline ki-trash fs-4 me-2"></i> Hapus
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="card-body pt-0">
-          <div class="table-responsive">
-            <table class="table align-middle table-row-dashed fs-6 gy-5">
-              <thead>
-                <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                  <th class="min-w-200px">Nama Partner</th>
-                  <th class="min-w-200px">Alamat</th>
-                  <th class="text-end min-w-150px">Markup (Untung)</th>
-                  <th class="text-end min-w-100px">Aksi</th>
-                </tr>
-              </thead>
-              <tbody class="fw-semibold text-gray-600">
-                <tr v-if="loading">
-                  <td colspan="4" class="text-center py-10">
-                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span> Memuat data...
-                  </td>
-                </tr>
-                <tr v-else v-for="item in filteredPartners" :key="item.id">
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <div class="symbol symbol-40px symbol-md-50px me-3 me-md-5">
-                        <span class="symbol-label bg-light-success text-success fw-bold">{{ item.name.charAt(0) }}</span>
-                      </div>
-                      <span class="text-gray-800 fs-6 fs-md-5 fw-bold">{{ item.name }}</span>
-                    </div>
-                  </td>
-                  <td>{{ item.address || '-' }}</td>
-                  <td class="text-end pe-0">Rp {{ formatNumber(item.markup_fixed) }}</td>
-                  <td class="text-end">
-                    <div class="d-flex justify-content-end gap-2">
-                      <button class="btn btn-sm btn-icon btn-light-primary" @click="openEditModal(item)">
-                        <i class="ki-outline ki-pencil fs-5"></i>
-                      </button>
-                      <button class="btn btn-sm btn-icon btn-light-danger" @click="handleDelete(item.id)">
-                        <i class="ki-outline ki-trash fs-5"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="!loading && filteredPartners.length === 0">
-                  <td colspan="4" class="text-center text-muted py-10">Belum ada partner terdaftar.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div v-if="filteredPartners.length === 0" class="col-12 text-center py-20 bg-light rounded border border-dashed border-gray-400">
+          <div class="text-gray-600 fw-bold fs-6">Belum ada partner terdaftar.</div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="modal fade" tabindex="-1" id="modal_partner">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title">{{ isEdit ? 'Edit Partner' : 'Tambah Partner Baru' }}</h3>
-          <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal">
+    <div class="modal-dialog modal-dialog-centered mw-450px">
+      <div class="modal-content border-0 rounded-4 shadow-lg">
+        <div class="modal-header border-0 justify-content-end pb-0">
+          <div class="btn btn-icon btn-sm btn-active-light-primary" data-bs-dismiss="modal">
             <i class="ki-outline ki-cross fs-1"></i>
           </div>
         </div>
 
-        <form @submit.prevent="savePartner">
-          <div class="modal-body">
-            <div class="mb-5">
-              <label class="form-label required">Nama Toko / Partner</label>
-              <div class="input-group input-group-solid mb-5">
-                <span class="input-group-text"><i class="ki-outline ki-shop fs-2"></i></span>
-                <input type="text" v-model="formData.name" class="form-control" placeholder="Contoh: Toko Berkah" required />
-              </div>
-            </div>
-
-            <div class="mb-5">
-              <label class="form-label">Alamat</label>
-              <div class="input-group input-group-solid mb-5">
-                <span class="input-group-text"><i class="ki-outline ki-geolocation fs-2"></i></span>
-                <textarea v-model="formData.address" class="form-control" rows="2" placeholder="Alamat lengkap..."></textarea>
-              </div>
-            </div>
-
-            <div class="mb-5">
-              <label class="form-label">Markup Fixed (Untung per Item)</label>
-              <div class="input-group input-group-solid mb-5">
-                <span class="input-group-text">Rp</span>
-                <input type="number" v-model="formData.markup_fixed" class="form-control" placeholder="1000" />
-              </div>
-              <div class="text-muted fs-7">Nominal untung tetap yang biasa diambil untuk partner ini.</div>
-            </div>
+        <div class="modal-body px-10 pt-0 pb-15">
+          <div class="text-center mb-8">
+            <h1 class="mb-3 text-gray-900 fs-2 fw-bolder">{{ isEdit ? 'Edit Partner' : 'Tambah Partner Baru' }}</h1>
           </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-            <button type="submit" class="btn btn-primary" :disabled="submitting">
-              <span v-if="!submitting">Simpan</span>
-              <span v-else><span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-            </button>
-          </div>
-        </form>
+          <form @submit.prevent="savePartner">
+            <div class="mb-6">
+              <label class="form-label required fw-bold text-gray-900">Nama Toko / Partner</label>
+              <input type="text" v-model="formData.name" class="form-control form-control-solid" placeholder="Contoh: Toko Berkah" required />
+            </div>
+
+            <div class="mb-6">
+              <label class="form-label fw-bold text-gray-900">Alamat</label>
+              <textarea v-model="formData.address" class="form-control form-control-solid" rows="2" placeholder="Alamat lengkap..."></textarea>
+            </div>
+
+            <div class="mb-8">
+              <label class="form-label fw-bold text-gray-900">Markup Fixed (Untung per Item)</label>
+              <input type="number" v-model="formData.markup_fixed" class="form-control form-control-solid" placeholder="1000" />
+              <div class="text-muted fs-8 mt-2">Nominal untung tetap yang biasa diambil untuk partner ini.</div>
+            </div>
+
+            <div class="d-flex flex-column gap-3">
+              <button type="submit" class="btn btn-lg btn-success fw-bold w-100 py-4 shadow-sm" :disabled="submitting">
+                <span v-if="!submitting">Simpan Partner</span>
+                <span v-else class="spinner-border spinner-border-sm"></span>
+              </button>
+              <button type="button" class="btn btn-lg btn-secondary fw-bold w-100 py-4 mt-2 shadow-sm" data-bs-dismiss="modal" style="background-color: #e4e6ef; color: #3f4254; border: none;">
+                Batal
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -226,3 +213,10 @@ onMounted(() => {
   partnerModal = new bootstrap.Modal(document.getElementById('modal_partner'))
 })
 </script>
+
+<style scoped>
+.transition-all { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.card-hover { transition: transform 0.15s ease-in-out; }
+.card-hover:active { transform: scale(0.97); background-color: #f9f9f9; }
+.btn:focus { box-shadow: none !important; }
+</style>
