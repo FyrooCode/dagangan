@@ -13,11 +13,6 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'home',
-          component: () => import('@/views/HomeView.vue'),
-        },
-        {
-          path: 'dashboard',
           name: 'dashboard',
           component: () => import('@/views/Dashboard.vue'),
         },
@@ -92,6 +87,7 @@ router.beforeEach(async (to) => {
   if (requiresAuth && !session) {
     return { name: 'login' }
   }
+
   if (to.name === 'login' && session) {
     return { name: 'dashboard' }
   }

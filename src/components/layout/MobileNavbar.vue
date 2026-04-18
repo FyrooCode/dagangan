@@ -4,7 +4,7 @@
       v-for="menu in menus"
       :key="menu.path"
       :to="menu.path"
-      class="mobile-navbar__item"
+      :class="['mobile-navbar__item', { 'mobile-navbar__item--active': isActive(menu.path) }]"
       :title="menu.title"
     >
       <i :class="menu.icon" class="mobile-navbar__icon"></i>
@@ -18,7 +18,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 const menus = [
-  { path: '/dashboard', title: 'Dashboard', icon: 'ki-outline ki-element-11' },
+  { path: '/', title: 'Dashboard', icon: 'ki-outline ki-element-11' },
   { path: '/shipments', title: 'Pengiriman', icon: 'ki-outline ki-delivery-3' },
   { path: '/returns', title: 'Sisa', icon: 'ki-outline ki-arrows-loop' },
   { path: '/payments', title: 'Pembayaran', icon: 'ki-outline ki-wallet' },
@@ -30,6 +30,13 @@ const show = computed(() => {
   // Hide on desktop, show on mobile only
   return true
 })
+
+const isActive = (path: string) => {
+  if (path === '/') {
+    return route.path === '/'
+  }
+  return route.path === path || route.path.startsWith(`${path}/`)
+}
 </script>
 
 <style scoped>
@@ -58,7 +65,10 @@ const show = computed(() => {
   align-items: center;
   padding: 0.35rem 0;
 }
-.mobile-navbar__item.router-link-active {
+.mobile-navbar__item--active {
+  color: var(--kt-primary, #009ef7);
+}
+.mobile-navbar__item--active .mobile-navbar__icon {
   color: var(--kt-primary, #009ef7);
 }
 .mobile-navbar__icon {
