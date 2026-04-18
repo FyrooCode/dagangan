@@ -64,6 +64,11 @@ const router = createRouter({
           name: 'payments',
           component: () => import('@/views/payments/PaymentList.vue'),
         },
+        {
+          path: 'lainnya',
+          name: 'lainnya',
+          component: () => import('@/views/LainnyaView.vue'),
+        },
       ],
     },
     {

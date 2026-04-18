@@ -2,9 +2,9 @@
   <div id="kt_app_toolbar" class="app-toolbar py-4">
     <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
       <div class="d-flex align-items-center">
-        <router-link to="/" class="btn btn-sm btn-icon btn-warning me-3 shadow-sm">
+        <!-- <router-link to="/" class="btn btn-sm btn-icon btn-warning me-3 shadow-sm">
           <i class="ki-outline ki-arrow-left fs-2 text-white"></i>
-        </router-link>
+        </router-link> -->
         <h1 class="text-gray-900 fw-bolder fs-2 mb-0">Manajemen Pembayaran</h1>
       </div>
     </div>
@@ -294,4 +294,7 @@ onMounted(() => {
 .card-hover { transition: transform 0.15s ease-in-out; }
 .card-hover:active { transform: scale(0.97); background-color: #f9f9f9; }
 .btn:focus { box-shadow: none !important; }
+#kt_app_content {
+  padding-bottom: 7rem;
+}
 </style>
