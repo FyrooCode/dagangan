@@ -11,9 +11,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'assets/media/logos/apple-icon-180x180.png'],
       manifest: {
-        name: 'Tracking Dagangan Bell',
-        short_name: 'DaganganBell',
-        description: 'Aplikasi Manajemen Penjualan dan Retur Bell',
+        name: 'Tracking Dagangan',
+        short_name: 'Dagangan',
+        description: 'Aplikasi Manajemen Penjualan',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
