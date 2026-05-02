@@ -20,38 +20,17 @@ export const mobileDashboardService = {
 
     if (shipmentError) throw shipmentError
 
-    const { data: payments, error: paymentError } = await supabase
-      .from('payments')
-      .select('shipment_id, amount_received')
-
-    if (paymentError) throw paymentError
-
-    const totalOmzet = shipments?.reduce((sum: number, item: any) => sum + (Number(item.total_amount) || 0), 0) || 0
-    const totalPendapatan = payments?.reduce((sum: number, item: any) => sum + (Number(item.amount_received) || 0), 0) || 0
-
-    const dailyTrend: Record<string, number> = {}
-    ;(shipments || []).forEach((item: any) => {
-      if (item.shipment_date) {
-        dailyTrend[item.shipment_date] = (dailyTrend[item.shipment_date] || 0) + (Number(item.total_amount) || 0)
-      }
-    })
-
-    const paymentsByShipment = (payments || []).reduce((acc: Record<string, number>, item: any) => {
-      const key = item.shipment_id || 'unknown'
-      acc[key] = (acc[key] || 0) + (Number(item.amount_received) || 0)
-      return acc
-    }, {})
-
+    let totalOmzet = 0
+    let totalPendapatan = 0
     let totalPiutang = 0
     let totalSisaUang = 0
+    const dailyTrend: Record<string, number> = {}
     const productSalesValue: Record<string, number> = {}
     const productQtySold: Record<string, number> = {}
     const productReturns: Record<string, number> = {}
 
     ;(shipments || []).forEach((item: any) => {
-      const paid = paymentsByShipment[item.id] || 0
-      const balance = Math.max((Number(item.total_amount) || 0) - paid, 0)
-      totalPiutang += balance
+      totalOmzet += Number(item.total_amount) || 0
 
       let returnAmount = 0
       if (item.returns) {
@@ -65,15 +44,24 @@ export const mobileDashboardService = {
         })
       }
 
+      const netAmount = (Number(item.total_amount) || 0) - returnAmount
+
       if (item.status === 'paid') {
+        totalPendapatan += netAmount
         item.shipment_details?.forEach((sd: any) => {
           const name = sd.products?.name || 'Unknown'
           productSalesValue[name] = (productSalesValue[name] || 0) + ((sd.quantity || 0) * (sd.unit_price_at_time || 0))
           productQtySold[name] = (productQtySold[name] || 0) + (sd.quantity || 0)
         })
+      } else {
+        totalPiutang += Math.max(netAmount, 0)
       }
 
       totalSisaUang += returnAmount
+
+      if (item.shipment_date) {
+        dailyTrend[item.shipment_date] = (dailyTrend[item.shipment_date] || 0) + netAmount
+      }
     })
 
     const countPending = (shipments || []).filter((item: any) => item.status !== 'paid').length
