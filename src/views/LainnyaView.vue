@@ -25,6 +25,17 @@
           </div>
         </router-link>
       </div>
+      <div class="col-6 col-md-4">
+        <router-link to="/rekap-bulanan" class="card card-flush h-100 bgi-no-repeat bgi-size-contain bgi-position-x-end shadow-sm card-hover lainnya-card">
+          <div class="card-body d-flex flex-column justify-content-center text-center p-8">
+            <div class="mb-4">
+              <i class="ki-outline ki-calendar-8 fs-3hx text-primary"></i>
+            </div>
+            <span class="text-gray-800 fw-bold fs-5">Rekap Bulanan</span>
+            <span class="text-gray-400 fw-semibold fs-7 mt-1">Laporan Bulanan</span>
+          </div>
+        </router-link>
+      </div>
       <!-- Add more master data cards here as you scale -->
     </div>
   </div>

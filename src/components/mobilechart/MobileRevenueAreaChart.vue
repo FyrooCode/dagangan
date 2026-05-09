@@ -7,7 +7,11 @@
       </h3>
     </div>
     <div class="card-body p-0 pb-4">
-      <div id="mobile_revenue_area_chart" style="width: 100%; height: 260px;"></div>
+      <div v-if="data && data.length > 0" id="mobile_revenue_area_chart" style="width: 100%; height: 260px;"></div>
+      <div v-else class="d-flex flex-column flex-center h-260px">
+        <i class="ki-outline ki-chart-line fs-3x text-gray-300 mb-2"></i>
+        <span class="text-gray-400 fw-bold fs-7">Belum ada data pendapatan</span>
+      </div>
     </div>
   </div>
 </template>

@@ -3,11 +3,15 @@
     <div class="card-header pt-6 border-0">
       <h3 class="card-title align-items-start flex-column">
         <span class="card-label fw-bold text-gray-800 fs-5">Total Terjual per Item</span>
-        <span class="text-muted mt-1 fw-semibold fs-8">Kuantitas produk yang berhasil lunas terjual</span>
+        <span class="text-muted mt-1 fw-semibold fs-8">Kuantitas produk yang terkirim (minus retur)</span>
       </h3>
     </div>
     <div class="card-body p-0 pb-4">
-      <div id="mobile_all_product_qty_chart" style="height: 280px;"></div>
+      <div v-if="data && data.length > 0" id="mobile_all_product_qty_chart" style="height: 280px;"></div>
+      <div v-else class="d-flex flex-column flex-center h-280px">
+        <i class="ki-outline ki-basket fs-3x text-gray-300 mb-2"></i>
+        <span class="text-gray-400 fw-bold fs-7">Belum ada data barang terjual</span>
+      </div>
     </div>
   </div>
 </template>

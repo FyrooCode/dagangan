@@ -53,6 +53,16 @@ __screenshots__/
 /dist/sw.js
 /dist/workbox-*.js
 
+# Understand Anything — Knowledge Graph
+# Commit .understand-anything/knowledge-graph.json and meta.json for team sharing
+# Exclude local scratch and overlay files
+.understand-anything/intermediate/
+.understand-anything/diff-overlay.json
+
+# Project Documentation & Data
+database-context.md
+*.sql
+
 # Misc
 *.tgz
 .AppleDouble

@@ -1,0 +1,1878 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "dagangan",
+    "languages": [
+      "typescript",
+      "vue",
+      "javascript",
+      "json",
+      "yaml",
+      "sql",
+      "html",
+      "css",
+      "markdown"
+    ],
+    "frameworks": [
+      "Vue 3",
+      "Vite",
+      "Pinia",
+      "Supabase",
+      "Vue Router"
+    ],
+    "description": "Vue 3 + TypeScript dashboard for partner and product management with Supabase integration",
+    "analyzedAt": "2026-05-09T05:22:29Z",
+    "gitCommitHash": "52fc817dfb657b176711b5de1b21f6afade77aca"
+  },
+  "nodes": [
+    {
+      "id": "file:src/main.ts",
+      "type": "file",
+      "language": "typescript",
+      "name": "main.ts",
+      "filePath": "src/main.ts",
+      "summary": "Application entry point that initializes Vue app with Pinia and Router, sets up authentication state from Supabase session",
+      "complexity": "moderate",
+      "tags": [
+        "entry-point",
+        "setup",
+        "authentication",
+        "initialization"
+      ]
+    },
+    {
+      "id": "file:src/App.vue",
+      "type": "file",
+      "language": "vue",
+      "name": "App.vue",
+      "filePath": "src/App.vue",
+      "summary": "Root Vue component that renders router-view and conditionally displays MobileNavbar based on route, initializes theme",
+      "complexity": "simple",
+      "tags": [
+        "root-component",
+        "layout",
+        "theme-management"
+      ]
+    },
+    {
+      "id": "file:src/router/index.ts",
+      "type": "file",
+      "language": "typescript",
+      "name": "index.ts",
+      "filePath": "src/router/index.ts",
+      "summary": "Vue Router configuration with authentication guard, defines routes for dashboard, products, partners, shipments, returns, payments",
+      "complexity": "moderate",
+      "tags": [
+        "router",
+        "routing",
+        "authentication-guard",
+        "lazy-loading"
+      ]
+    },
+    {
+      "id": "file:src/lib/supabase.ts",
+      "type": "file",
+      "language": "typescript",
+      "name": "supabase.ts",
+      "filePath": "src/lib/supabase.ts",
+      "summary": "Supabase client initialization with environment variables for URL and anonymous key",
+      "complexity": "simple",
+      "tags": [
+        "backend-integration",
+        "database",
+        "configuration"
+      ]
+    },
+    {
+      "id": "file:src/stores/auth.ts",
+      "type": "file",
+      "language": "typescript",
+      "name": "auth.ts",
+      "filePath": "src/stores/auth.ts",
+      "summary": "Pinia auth store managing user session state and auth state cleanup",
+      "complexity": "simple",
+      "tags": [
+        "state-management",
+        "authentication",
+        "pinia-store"
+      ]
+    },
+    {
+      "id": "file:src/stores/counter.ts",
+      "type": "file",
+      "language": "typescript",
+      "name": "counter.ts",
+      "filePath": "src/stores/counter.ts",
+      "summary": "Pinia counter store example with increment action and doubleCount computed property",
+      "complexity": "simple",
+      "tags": [
+        "state-management",
+        "pinia-store",
+        "example"
+      ]
+    },
+    {
+      "id": "file:src/stores/theme.ts",
+      "type": "file",
+      "language": "typescript",
+      "name": "theme.ts",
+      "filePath": "src/stores/theme.ts",
+      "summary": "Pinia theme store for dark/light mode management with localStorage persistence and HTML attribute manipulation",
+      "complexity": "simple",
+      "tags": [
+        "state-management",
+        "theme",
+        "pinia-store",
+        "dom-manipulation"
+      ]
+    },
+    {
+      "id": "file:src/layouts/DefaultLayout.vue",
+      "type": "file",
+      "language": "vue",
+      "name": "DefaultLayout.vue",
+      "filePath": "src/layouts/DefaultLayout.vue",
+      "summary": "Main application layout with sticky header, sidebar navigation, and footer for authenticated pages, includes Metronic component initialization",
+      "complexity": "simple",
+      "tags": [
+        "layout",
+        "structure",
+        "main-layout"
+      ]
+    },
+    {
+      "id": "file:src/layouts/AuthLayout.vue",
+      "type": "file",
+      "language": "vue",
+      "name": "AuthLayout.vue",
+      "filePath": "src/layouts/AuthLayout.vue",
+      "summary": "Authentication layout with centered form container and background image for login/signup pages",
+      "complexity": "simple",
+      "tags": [
+        "layout",
+        "authentication",
+        "auth-layout"
+      ]
+    },
+    {
+      "id": "file:src/components/layout/Header.vue",
+      "type": "file",
+      "language": "vue",
+      "name": "Header.vue",
+      "filePath": "src/components/layout/Header.vue",
+      "summary": "Top header component with sticky positioning and Metronic-based menu system with drawer toggles",
+      "complexity": "moderate",
+      "tags": [
+        "component",
+        "layout",
+        "header",
+        "navigation"
+      ]
+    },
+    {
+      "id": "file:src/components/layout/Sidebar.vue",
+      "type": "file",
+      "language": "vue",
+      "name": "Sidebar.vue",
+      "filePath": "src/components/layout/Sidebar.vue",
+      "summary": "Navigation sidebar component fetching dashboard statistics from service, displaying user menu with logout functionality",
+      "complexity": "moderate",
+      "tags": [
+        "component",
+        "layout",
+        "navigation",
+        "data-fetching"
+      ]
+    },
+    {
+      "id": "file:src/components/layout/Footer.vue",
+      "type": "file",
+      "language": "vue",
+      "name": "Footer.vue",
+      "filePath": "src/components/layout/Footer.vue",
+      "summary": "Footer component with empty template",
+      "complexity": "simple",
+      "tags": [
+        "component",
+        "layout",
+        "footer"
+      ]
+    },
+    {
+      "id": "file:src/components/layout/MobileNavbar.vue",
+      "type": "file",
+      "language": "vue",
+      "name": "MobileNavbar.vue",
+      "filePath": "src/components/layout/MobileNavbar.vue",
+      "summary": "Mobile navigation bar component with router links for dashboard, shipments, returns, and payments",
+      "complexity": "simple",
+      "tags": [
+        "component",
+        "mobile",
+        "navigation"
+      ]
+    },
+    {
+      "id": "file:src/components/dashboard/DesktopDashboard.vue",
+      "type": "file",
+      "language": "vue",
+      "name": "DesktopDashboard.vue",
+      "filePath": "src/components/dashboard/DesktopDashboard.vue",
+      "summary": "Desktop dashboard view displaying KPI cards with CSS grid layout, charts for revenue trends, top products, returns, and product quantities",
+      "complexity": "moderate",
+      "tags": [
+        "component",
+        "dashboard",
+        "desktop",
+        "data-visualization"
+      ]
+    },
+    {
+      "id": "file:src/components/dashboard/MobileDashboard.vue",
+      "type": "file",
+      "language": "vue",
+      "name": "MobileDashboard.vue",
+      "filePath": "src/components/dashboard/MobileDashboard.vue",
+      "summary": "Mobile dashboard view with tab switching between all data and filtered monthly data, displaying KPI cards and mobile-optimized charts",
+      "complexity": "moderate",
+      "tags": [
+        "component",
+        "dashboard",
+        "mobile",
+        "data-visualization"
+      ]
+    },
+    {
+      "id": "file:src/services/AuthService.ts",
+      "type": "file",
+      "language": "typescript",
+      "name": "AuthService.ts",
+      "filePath": "src/services/AuthService.ts",
+      "summary": "Authentication service providing login, logout, and getCurrentUser methods using Supabase authentication",
+      "complexity": "simple",
+      "tags": [
+        "service",
+        "authentication",
+        "api"
+      ]
+    },
+    {
+      "id": "file:src/services/DashboardService.ts",
+      "type": "file",
+      "language": "typescript",
+      "name": "DashboardService.ts",
+      "filePath": "src/services/DashboardService.ts",
+      "summary": "Dashboard data service fetching shipment data from Supabase with joins, calculating statistics, trends, top products, and return metrics",
+      "complexity": "moderate",
+      "tags": [
+        "service",
+        "data-fetching",
+        "business-logic",
+        "analytics"
+      ]
+    },
+    {
+      "id": "file:src/services/MobileDashboardService.ts",
+      "type": "file",
+      "language": "typescript",
+      "name": "MobileDashboardService.ts",
+      "filePath": "src/services/MobileDashboardService.ts",
+      "summary": "Mobile dashboard service fetching filtered shipment data with optional month/year filtering, calculating omzet, pendapatan, piutang, and product metrics",
+      "complexity": "moderate",
+      "tags": [
+        "service",
+        "data-fetching",
+        "analytics",
+        "filtering"
+      ]
+    },
+    {
+      "id": "file:src/services/ProductService.ts",
+      "type": "file",
+      "language": "typescript",
+      "name": "ProductService.ts",
+      "filePath": "src/services/ProductService.ts",
+      "summary": "Product CRUD service providing getAll, create, update, and delete operations for products in Supabase",
+      "complexity": "simple",
+      "tags": [
+        "service",
+        "crud",
+        "database"
+      ]
+    },
+    {
+      "id": "file:src/services/PartnerService.ts",
+      "type": "file",
+      "language": "typescript",
+      "name": "PartnerService.ts",
+      "filePath": "src/services/PartnerService.ts",
+      "summary": "Partner CRUD service providing getAll, create, update, and delete operations for partners in Supabase",
+      "complexity": "simple",
+      "tags": [
+        "service",
+        "crud",
+        "database"
+      ]
+    },
+    {
+      "id": "file:src/services/PaymentService.ts",
+      "type": "file",
+      "name": "PaymentService.ts",
+      "filePath": "src/services/PaymentService.ts",
+      "summary": "Supabase service for payment and shipment management. Exports paymentService object with getAllShipments() method that fetches and enriches shipment data with partner, payment, and return information.",
+      "tags": [
+        "payment",
+        "supabase-service",
+        "shipment-data",
+        "data-enrichment"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/services/ReturnService.ts",
+      "type": "file",
+      "name": "ReturnService.ts",
+      "filePath": "src/services/ReturnService.ts",
+      "summary": "Supabase service for return management. Exports returnService with getAllCombined() method that aggregates shipment, return, and payment data for three return statuses (queue, active, closed).",
+      "tags": [
+        "returns",
+        "supabase-service",
+        "data-enrichment",
+        "status-aggregation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/services/ShipmentService.ts",
+      "type": "file",
+      "name": "ShipmentService.ts",
+      "filePath": "src/services/ShipmentService.ts",
+      "summary": "Supabase service for shipment operations. Exports shipmentService with getAll() method that fetches shipments with related partners, payments, returns, and details, computing enriched fields like payment status and return metrics.",
+      "tags": [
+        "shipments",
+        "supabase-service",
+        "data-enrichment",
+        "calculations"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/views/Dashboard.vue",
+      "type": "file",
+      "name": "Dashboard.vue",
+      "filePath": "src/views/Dashboard.vue",
+      "summary": "Main dashboard view with responsive layout. Conditionally renders DesktopDashboard or MobileDashboard based on media query (max-width: 991px). Uses ref and lifecycle hooks for media query listener.",
+      "tags": [
+        "responsive-layout",
+        "dashboard",
+        "mobile-adaptive",
+        "media-query"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/views/Login.vue",
+      "type": "file",
+      "name": "Login.vue",
+      "filePath": "src/views/Login.vue",
+      "summary": "Authentication login view. Manages email/password input with validation, loading state, and password visibility toggle. Integrates authService for login and routes to dashboard on success or shows error alerts.",
+      "tags": [
+        "authentication",
+        "form-handling",
+        "error-management",
+        "routing"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/views/HomeView.vue",
+      "type": "file",
+      "name": "HomeView.vue",
+      "filePath": "src/views/HomeView.vue",
+      "summary": "Home/dashboard view displaying KPI cards for unpaid invoices and product inventory metrics with Metronic styling.",
+      "tags": [
+        "dashboard",
+        "kpi-display",
+        "metrics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/views/LainnyaView.vue",
+      "type": "file",
+      "name": "LainnyaView.vue",
+      "filePath": "src/views/LainnyaView.vue",
+      "summary": "Master data navigation view providing router links to product, partner, and other master data management sections.",
+      "tags": [
+        "navigation",
+        "master-data",
+        "router-links"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/views/Shipments.vue",
+      "type": "file",
+      "name": "Shipments.vue",
+      "filePath": "src/views/Shipments.vue",
+      "summary": "Empty shipments view component (minimal template).",
+      "tags": [
+        "shipments",
+        "empty-template"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/views/partners/PartnerList.vue",
+      "type": "file",
+      "name": "PartnerList.vue",
+      "filePath": "src/views/partners/PartnerList.vue",
+      "summary": "Partner/store management view. Displays searchable grid of partners with details (name, address, markup fixed). Supports add, edit, and delete operations via modals. Uses formatNumber utility for currency display.",
+      "tags": [
+        "partner-management",
+        "crud-operations",
+        "search",
+        "modal-forms",
+        "data-display"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/views/payments/PaymentList.vue",
+      "type": "file",
+      "name": "PaymentList.vue",
+      "filePath": "src/views/payments/PaymentList.vue",
+      "summary": "Payment management view with tabbed interface for unpaid and paid shipments. Displays shipment cards with payment status, partner info, totals, and return deductions. Tab-based filtering with badge counters.",
+      "tags": [
+        "payment-management",
+        "tabbed-interface",
+        "status-filtering",
+        "financial-metrics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/views/products/ProductList.vue",
+      "type": "file",
+      "name": "ProductList.vue",
+      "filePath": "src/views/products/ProductList.vue",
+      "summary": "Product catalog management view. Displays searchable grid of products with name, base price, and unit. Supports add, edit, and delete operations through modal forms. Includes loading states and empty states.",
+      "tags": [
+        "product-management",
+        "crud-operations",
+        "search",
+        "modal-forms",
+        "catalog"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/views/returns/ReturnForm.vue",
+      "type": "file",
+      "name": "ReturnForm.vue",
+      "filePath": "src/views/returns/ReturnForm.vue",
+      "summary": "Return form for inputting return items (barang sisa). Allows selection of shipment and return date, then displays itemized return quantities with shipping quantities for comparison. Form-based interface for return data entry.",
+      "tags": [
+        "return-management",
+        "form-handling",
+        "shipment-selection",
+        "quantity-tracking"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/views/returns/ReturnList.vue",
+      "type": "file",
+      "name": "ReturnList.vue",
+      "filePath": "src/views/returns/ReturnList.vue",
+      "summary": "Return management list view with three-tab interface: queue (belum input), active (diisi), and closed (selesai). Displays shipment cards with partner info, payment status, and return item counts. Supports filtering and row click navigation.",
+      "tags": [
+        "return-management",
+        "tabbed-interface",
+        "status-tracking",
+        "shipment-details"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/views/shipments/ShipmentForm.vue",
+      "type": "file",
+      "name": "ShipmentForm.vue",
+      "filePath": "src/views/shipments/ShipmentForm.vue",
+      "summary": "Shipment creation/edit form with two-column layout. Left panel: shipment details (partner selection, date, expected payment). Right panel: product catalog search and selection. Supports partner modal selection and shipment date/tempo date inputs.",
+      "tags": [
+        "shipment-management",
+        "form-handling",
+        "partner-selection",
+        "product-catalog",
+        "multi-column-layout"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/views/shipments/ShipmentList.vue",
+      "type": "file",
+      "name": "ShipmentList.vue",
+      "filePath": "src/views/shipments/ShipmentList.vue",
+      "summary": "Shipment list view with tabbed interface for active and completed shipments. Displays shipment cards with partner info, invoice status (paid/unpaid), return status (SISA count), and financial metrics. Quick modal support.",
+      "tags": [
+        "shipment-list",
+        "tabbed-interface",
+        "status-display",
+        "financial-data"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/components/chart/AllProductQtyChart.vue",
+      "type": "file",
+      "name": "AllProductQtyChart.vue",
+      "filePath": "src/components/chart/AllProductQtyChart.vue",
+      "summary": "ApexCharts bar chart component showing total sold quantity per product. Accepts data prop with product names and quantities. Renders horizontal bar chart with purple color scheme.",
+      "tags": [
+        "chart-component",
+        "apexcharts",
+        "product-analytics",
+        "quantity-metrics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/chart/ProductReturnBarChart.vue",
+      "type": "file",
+      "name": "ProductReturnBarChart.vue",
+      "filePath": "src/components/chart/ProductReturnBarChart.vue",
+      "summary": "Chart component for product return analysis. Minimal implementation with chart placeholder element.",
+      "tags": [
+        "chart-component",
+        "return-analytics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/chart/RevenueAreaChart.vue",
+      "type": "file",
+      "name": "RevenueAreaChart.vue",
+      "filePath": "src/components/chart/RevenueAreaChart.vue",
+      "summary": "ApexCharts area chart component displaying revenue trends. Accepts data array with x (timestamp) and y (revenue) values. Renders smooth area chart with green color and data validation.",
+      "tags": [
+        "chart-component",
+        "apexcharts",
+        "revenue-analytics",
+        "time-series"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/chart/TopProductChart.vue",
+      "type": "file",
+      "name": "TopProductChart.vue",
+      "filePath": "src/components/chart/TopProductChart.vue",
+      "summary": "ApexCharts horizontal bar chart displaying top 5 best-selling products by total paid sales. Accepts data with product names and totals. Includes currency formatting for x-axis labels.",
+      "tags": [
+        "chart-component",
+        "apexcharts",
+        "sales-analytics",
+        "top-products"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/chart/TopReturnProductChart.vue",
+      "type": "file",
+      "name": "TopReturnProductChart.vue",
+      "filePath": "src/components/chart/TopReturnProductChart.vue",
+      "summary": "ApexCharts horizontal bar chart showing products with highest return quantities. Accepts data with product names and return quantities. Uses red color scheme for return metrics.",
+      "tags": [
+        "chart-component",
+        "apexcharts",
+        "return-analytics",
+        "product-quality"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/mobilechart/MobileAllProductQtyChart.vue",
+      "type": "file",
+      "name": "MobileAllProductQtyChart.vue",
+      "filePath": "src/components/mobilechart/MobileAllProductQtyChart.vue",
+      "language": "vue",
+      "fileCategory": "code",
+      "summary": "Mobile-optimized Vue 3 component rendering a bar chart displaying total product quantities sold. Uses ApexCharts library to visualize quantity data with responsive styling and empty state handling.",
+      "complexity": "moderate",
+      "tags": [
+        "component",
+        "chart",
+        "mobile",
+        "visualization"
+      ],
+      "languageNotes": "Vue 3 SFC with <script setup> and TypeScript. Declares ApexCharts as external global. Uses onMounted and watch hooks for chart lifecycle and data reactivity."
+    },
+    {
+      "id": "file:src/components/mobilechart/MobileKpiCard.vue",
+      "type": "file",
+      "name": "MobileKpiCard.vue",
+      "filePath": "src/components/mobilechart/MobileKpiCard.vue",
+      "language": "vue",
+      "fileCategory": "code",
+      "summary": "Reusable mobile KPI (Key Performance Indicator) card component displaying a metric label, formatted currency value, icon, and optional subtitle. Supports variant styling through computed classes.",
+      "complexity": "simple",
+      "tags": [
+        "component",
+        "kpi",
+        "mobile",
+        "metric"
+      ],
+      "languageNotes": "Vue 3 SFC with <script setup>. Uses computed properties for derived styling and formatted values. Accepts props: label, value, iconClass, subtitle, variant."
+    },
+    {
+      "id": "file:src/components/mobilechart/MobileRevenueAreaChart.vue",
+      "type": "file",
+      "name": "MobileRevenueAreaChart.vue",
+      "filePath": "src/components/mobilechart/MobileRevenueAreaChart.vue",
+      "language": "vue",
+      "fileCategory": "code",
+      "summary": "Mobile-optimized Vue 3 component rendering an area chart displaying daily revenue trends. Transforms date/value pairs into formatted categories and handles empty states gracefully.",
+      "complexity": "moderate",
+      "tags": [
+        "component",
+        "chart",
+        "mobile",
+        "revenue",
+        "timeseries"
+      ],
+      "languageNotes": "Vue 3 SFC using ApexCharts. Processes date data (x, y) props into formatted chart categories. Includes data validation and safe number coercion."
+    },
+    {
+      "id": "file:src/components/mobilechart/MobileTopProductChart.vue",
+      "type": "file",
+      "name": "MobileTopProductChart.vue",
+      "filePath": "src/components/mobilechart/MobileTopProductChart.vue",
+      "language": "vue",
+      "fileCategory": "code",
+      "summary": "Mobile chart component displaying top 5 best-selling products as a horizontal bar chart with Indonesian rupiah (Rp) formatting. Includes empty state UI with icon and message.",
+      "complexity": "moderate",
+      "tags": [
+        "component",
+        "chart",
+        "mobile",
+        "products",
+        "sales"
+      ],
+      "languageNotes": "Vue 3 SFC with ApexCharts. Formats currency values using Intl.NumberFormat for Indonesian locale. Charts are destroyable and re-rendered on prop changes."
+    },
+    {
+      "id": "file:src/components/mobilechart/MobileTopReturnProductChart.vue",
+      "type": "file",
+      "name": "MobileTopReturnProductChart.vue",
+      "filePath": "src/components/mobilechart/MobileTopReturnProductChart.vue",
+      "language": "vue",
+      "fileCategory": "code",
+      "summary": "Mobile component rendering a horizontal bar chart showing products with the highest return quantities. Displays product names and return count with responsive styling and empty state.",
+      "complexity": "moderate",
+      "tags": [
+        "component",
+        "chart",
+        "mobile",
+        "returns",
+        "quality"
+      ],
+      "languageNotes": "Vue 3 SFC with ApexCharts. Similar structure to MobileTopProductChart but for return metrics instead of sales. Uses red color scheme (#F1416C) for returns."
+    },
+    {
+      "id": "config:package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "package.json",
+      "language": "json",
+      "fileCategory": "config",
+      "summary": "Project manifest defining the 'dagangan' Vue 3 + TypeScript dashboard application with dependencies: Vue 3.5.29, Vue Router 5.0.3, Pinia 3.0.4, Supabase 2.99.1. Build toolchain includes Vite 7.3.1 and PWA support.",
+      "complexity": "simple",
+      "tags": [
+        "manifest",
+        "dependencies",
+        "build",
+        "pwa"
+      ],
+      "languageNotes": "JSON. Specifies ES modules (type: module). Build scripts use 'run-p' for parallel execution. Node requirement: 20.19.0+ or 22.12.0+."
+    },
+    {
+      "id": "config:package-lock.json",
+      "type": "config",
+      "name": "package-lock.json",
+      "filePath": "package-lock.json",
+      "language": "json",
+      "fileCategory": "config",
+      "summary": "Npm lockfile containing resolved dependency tree and integrity hashes for reproducible builds. Locks 7680 lines of transitive dependencies for Vue, Vite, TypeScript, and Supabase ecosystem.",
+      "complexity": "simple",
+      "tags": [
+        "lockfile",
+        "dependencies",
+        "reproducibility"
+      ],
+      "languageNotes": "JSON lockfile format. Generated by npm. Essential for CI/CD reproducibility."
+    },
+    {
+      "id": "config:vite.config.ts",
+      "type": "config",
+      "name": "vite.config.ts",
+      "filePath": "vite.config.ts",
+      "language": "typescript",
+      "fileCategory": "config",
+      "summary": "Vite build configuration for Vue 3 SPA with PWA support. Configures Vue plugin, path aliases (@/* → ./src/*), PWA manifest with icons, and workbox caching (5MB limit) for offline support.",
+      "complexity": "moderate",
+      "tags": [
+        "build",
+        "vite",
+        "pwa",
+        "plugin"
+      ],
+      "languageNotes": "TypeScript. Imports Vite defineConfig, Vue plugin, VitePWA. Defines PWA manifest metadata including app name 'Tracking Dagangan', icons, and workbox globals patterns."
+    },
+    {
+      "id": "config:tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "tsconfig.json",
+      "language": "json",
+      "fileCategory": "config",
+      "summary": "Root TypeScript configuration file serving as a monorepo-style composite config that references tsconfig.node.json and tsconfig.app.json for separate compilation contexts.",
+      "complexity": "simple",
+      "tags": [
+        "typescript",
+        "config",
+        "composite"
+      ],
+      "languageNotes": "JSON. Uses TypeScript project references feature to separate Node build tools from app code compilation."
+    },
+    {
+      "id": "config:tsconfig.app.json",
+      "type": "config",
+      "name": "tsconfig.app.json",
+      "filePath": "tsconfig.app.json",
+      "language": "json",
+      "fileCategory": "config",
+      "summary": "Application-specific TypeScript configuration extending @vue/tsconfig DOM presets. Enables strict array/object indexing, path mapping for @ alias, and builds incremental .tsbuildinfo files in node_modules/.tmp/.",
+      "complexity": "moderate",
+      "tags": [
+        "typescript",
+        "vue",
+        "config",
+        "strict"
+      ],
+      "languageNotes": "JSON extending @vue/tsconfig/tsconfig.dom.json. Includes src/**/*.vue files, excludes src/**/__tests__/* directories."
+    },
+    {
+      "id": "config:tsconfig.node.json",
+      "type": "config",
+      "name": "tsconfig.node.json",
+      "filePath": "tsconfig.node.json",
+      "language": "json",
+      "fileCategory": "config",
+      "summary": "TypeScript configuration for Node.js build tools (Vite, Vitest, Playwright, ESLint). Uses bundler module resolution and preserves module syntax for ESM compatibility.",
+      "complexity": "moderate",
+      "tags": [
+        "typescript",
+        "node",
+        "config",
+        "build-tools"
+      ],
+      "languageNotes": "JSON extending @tsconfig/node24. Sets moduleResolution to 'bundler' for better tool support. No emit during type-checking."
+    },
+    {
+      "id": "file:env.d.ts",
+      "type": "file",
+      "name": "env.d.ts",
+      "filePath": "env.d.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "summary": "Vite client type definitions and environment variable interfaces. Declares VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY as readonly string environment variables for type-safe import.meta.env access.",
+      "complexity": "simple",
+      "tags": [
+        "types",
+        "environment",
+        "vite"
+      ],
+      "languageNotes": "TypeScript ambient module declarations (no export). Triple-slash reference to vite/client types. Interface ImportMetaEnv extends import.meta.env typing."
+    },
+    {
+      "id": "file:index.html",
+      "type": "file",
+      "name": "index.html",
+      "filePath": "index.html",
+      "language": "html",
+      "fileCategory": "markup",
+      "summary": "Single-page application HTML entry point. Loads Metronic CSS and JavaScript bundles, imports Vue app from src/main.ts, and configures PWA/manifest metadata.",
+      "complexity": "simple",
+      "tags": [
+        "entry-point",
+        "spa",
+        "html"
+      ],
+      "languageNotes": "HTML5. Includes X-Frame-Options clickjacking protection. Loads external fonts from Google Fonts and global plugin/theme bundles."
+    },
+    {
+      "id": "config:.gitignore",
+      "type": "config",
+      "name": ".gitignore",
+      "filePath": ".gitignore",
+      "language": "plaintext",
+      "fileCategory": "config",
+      "summary": "Git ignore patterns excluding node_modules, build artifacts (dist/), environment secrets (.env files), editor configs, logs, and PWA/service worker artifacts.",
+      "complexity": "simple",
+      "tags": [
+        "git",
+        "security",
+        "build"
+      ],
+      "languageNotes": "Plaintext glob patterns. Explicitly guards .env, .env.local, and .env.*.js to prevent secret leakage. Excludes PWA artifacts and test captures."
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "summary": "Project README documenting Vue 3 + Vite setup, IDE recommendations (VS Code + Volar), browser devtools setup for Vue debugging, TypeScript support via vue-tsc, and build/dev commands.",
+      "complexity": "simple",
+      "tags": [
+        "documentation",
+        "setup",
+        "guide"
+      ],
+      "languageNotes": "Markdown. Includes sections on IDE setup, type support, and build commands. Provides links to Vue devtools extensions and configuration references."
+    },
+    {
+      "id": "document:database-context.md",
+      "type": "document",
+      "name": "database-context.md",
+      "filePath": "database-context.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "summary": "Database schema documentation for Supabase backend. Defines 7 core tables: partners (sellers), products, shipments, shipment_details, payments, returns, return_details. Includes column types and constraints.",
+      "complexity": "moderate",
+      "tags": [
+        "database",
+        "schema",
+        "supabase"
+      ],
+      "languageNotes": "Markdown tables documenting UUID PKs, foreign keys to user_id, and nullable timestamp/numeric fields for commerce domain."
+    },
+    {
+      "id": "resource:infra:.env",
+      "type": "resource",
+      "name": ".env",
+      "filePath": ".env",
+      "language": "env",
+      "fileCategory": "infra",
+      "summary": "Environment configuration file storing Supabase connection credentials: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY for API authentication.",
+      "complexity": "simple",
+      "tags": [
+        "secrets",
+        "supabase",
+        "environment"
+      ],
+      "languageNotes": "Shell-style KEY=VALUE format. Contains sensitive credentials (anon key) that should not be committed. CRITICAL: This file is listed in .gitignore."
+    },
+    {
+      "id": "pipeline:.github/workflows/deploy.yml",
+      "type": "pipeline",
+      "name": "deploy.yml",
+      "filePath": ".github/workflows/deploy.yml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "summary": "GitHub Actions CI/CD workflow automating build and deployment to staging server. Triggers on main branch push. Steps: checkout → setup Node 22 → install cloudflared → npm build → rsync deploy via SSH tunnel.",
+      "complexity": "moderate",
+      "tags": [
+        "ci-cd",
+        "github-actions",
+        "deployment"
+      ],
+      "languageNotes": "YAML workflow. Uses cloudflared for SSH tunneling through Cloudflare. Builds with environment secrets (VITE_SUPABASE_*) before deployment."
+    },
+    {
+      "id": "table:schema:payments",
+      "type": "table",
+      "name": "payments",
+      "filePath": "database-context.md",
+      "summary": "Supabase payments table recording payment transactions. Fields: id (uuid PK), shipment_id (FK), amount_received (numeric), payment_date, created_at.",
+      "complexity": "simple",
+      "tags": [
+        "database",
+        "commerce",
+        "transaction"
+      ],
+      "languageNotes": "PostgreSQL table. Foreign key to shipments. Used by PaymentService for revenue tracking."
+    },
+    {
+      "id": "table:schema:products",
+      "type": "table",
+      "name": "products",
+      "filePath": "database-context.md",
+      "summary": "Supabase products table storing seller inventory. Fields: id (uuid PK), user_id (FK to users), name (text), base_price (numeric), unit (text nullable), created_at.",
+      "complexity": "simple",
+      "tags": [
+        "database",
+        "commerce",
+        "inventory"
+      ],
+      "languageNotes": "PostgreSQL table. user_id scopes products to sellers. Used by ProductService and ProductList view."
+    },
+    {
+      "id": "table:schema:shipments",
+      "type": "table",
+      "name": "shipments",
+      "filePath": "database-context.md",
+      "summary": "Supabase shipments table tracking orders to partners. Fields: id (uuid PK), user_id, partner_id (FK), shipment_date, expected_payment_date, total_amount, status, notes, created_at.",
+      "complexity": "moderate",
+      "tags": [
+        "database",
+        "commerce",
+        "order"
+      ],
+      "languageNotes": "PostgreSQL table. Core transaction record linking users, partners, and payments. Used by ShipmentService and dashboard analytics."
+    },
+    {
+      "id": "table:schema:returns",
+      "type": "table",
+      "name": "returns",
+      "filePath": "database-context.md",
+      "summary": "Supabase returns table recording product returns/refunds. Fields: id (uuid PK), user_id, shipment_id (FK), return_date (date), notes (text nullable), created_at.",
+      "complexity": "simple",
+      "tags": [
+        "database",
+        "commerce",
+        "quality"
+      ],
+      "languageNotes": "PostgreSQL table. Links to shipments for RMA tracking. Used by ReturnService and return analytics."
+    },
+    {
+      "id": "table:schema:return_details",
+      "type": "table",
+      "name": "return_details",
+      "filePath": "database-context.md",
+      "summary": "Supabase return_details line-item table. Fields: id (uuid PK), return_id (FK), product_id (FK), quantity_returned (int4).",
+      "complexity": "simple",
+      "tags": [
+        "database",
+        "commerce",
+        "quality"
+      ],
+      "languageNotes": "PostgreSQL table. Denormalizes return quantities per product for detailed RMA analysis."
+    },
+    {
+      "id": "resource:data:payments_rows.sql",
+      "type": "resource",
+      "name": "payments_rows.sql",
+      "filePath": "payments_rows.sql",
+      "language": "sql",
+      "fileCategory": "data",
+      "summary": "Sample data INSERT statements for payments table. 16 payment records with amounts ranging 150k-647.5k IDR, dated April-May 2026, demonstrating payment workflow.",
+      "complexity": "simple",
+      "tags": [
+        "sample-data",
+        "payments"
+      ],
+      "languageNotes": "SQL INSERT statements. Values include UUID shipment FKs, numeric amounts, and timestamptz records."
+    },
+    {
+      "id": "resource:data:products_rows.sql",
+      "type": "resource",
+      "name": "products_rows.sql",
+      "filePath": "products_rows.sql",
+      "language": "sql",
+      "fileCategory": "data",
+      "summary": "Sample product inventory INSERT statements. Multiple product records with base prices in IDR, units (pcs, box), and creation timestamps for dashboard testing.",
+      "complexity": "simple",
+      "tags": [
+        "sample-data",
+        "products"
+      ],
+      "languageNotes": "SQL INSERT statements. Demonstrates various unit types and price ranges for commerce calculations."
+    },
+    {
+      "id": "resource:data:returns_rows.sql",
+      "type": "resource",
+      "name": "returns_rows.sql",
+      "filePath": "returns_rows.sql",
+      "language": "sql",
+      "fileCategory": "data",
+      "summary": "Sample return records INSERT statements demonstrating return transactions linked to shipments, with return dates and optional notes for quality tracking.",
+      "complexity": "simple",
+      "tags": [
+        "sample-data",
+        "returns"
+      ],
+      "languageNotes": "SQL INSERT statements. Records link user_id → return_id → shipment_id for quality/RMA workflows."
+    },
+    {
+      "id": "resource:data:return_details_rows.sql",
+      "type": "resource",
+      "name": "return_details_rows.sql",
+      "filePath": "return_details_rows.sql",
+      "language": "sql",
+      "fileCategory": "data",
+      "summary": "Sample return detail line items INSERT statements linking specific products to returns with returned quantity counts for granular RMA tracking.",
+      "complexity": "simple",
+      "tags": [
+        "sample-data",
+        "returns"
+      ],
+      "languageNotes": "SQL INSERT statements. Denormalizes return quantities per product for detailed analytics."
+    },
+    {
+      "id": "resource:data:shipments_rows.sql",
+      "type": "resource",
+      "name": "shipments_rows.sql",
+      "filePath": "shipments_rows.sql",
+      "language": "sql",
+      "fileCategory": "data",
+      "summary": "Sample shipment records INSERT statements with shipment dates, partner assignments, total amounts (500k-1M IDR range), and status/notes for order tracking.",
+      "complexity": "simple",
+      "tags": [
+        "sample-data",
+        "shipments"
+      ],
+      "languageNotes": "SQL INSERT statements. Core transaction records seeding dashboard analytics and payment workflows."
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/main.ts",
+      "target": "file:src/App.vue",
+      "type": "imports",
+      "label": "imports App component"
+    },
+    {
+      "source": "file:src/main.ts",
+      "target": "file:src/router/index.ts",
+      "type": "imports",
+      "label": "imports router configuration"
+    },
+    {
+      "source": "file:src/main.ts",
+      "target": "file:src/lib/supabase.ts",
+      "type": "imports",
+      "label": "imports Supabase client"
+    },
+    {
+      "source": "file:src/main.ts",
+      "target": "file:src/stores/auth.ts",
+      "type": "imports",
+      "label": "imports auth store"
+    },
+    {
+      "source": "file:src/App.vue",
+      "target": "file:src/layouts/DefaultLayout.vue",
+      "type": "imports",
+      "label": "uses DefaultLayout via router"
+    },
+    {
+      "source": "file:src/App.vue",
+      "target": "file:src/layouts/AuthLayout.vue",
+      "type": "imports",
+      "label": "uses AuthLayout via router"
+    },
+    {
+      "source": "file:src/App.vue",
+      "target": "file:src/components/layout/MobileNavbar.vue",
+      "type": "imports",
+      "label": "imports MobileNavbar component"
+    },
+    {
+      "source": "file:src/App.vue",
+      "target": "file:src/stores/theme.ts",
+      "type": "imports",
+      "label": "imports theme store"
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/layouts/DefaultLayout.vue",
+      "type": "imports",
+      "label": "uses DefaultLayout for authenticated routes"
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/layouts/AuthLayout.vue",
+      "type": "imports",
+      "label": "uses AuthLayout for auth routes"
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/lib/supabase.ts",
+      "type": "imports",
+      "label": "imports Supabase for auth check"
+    },
+    {
+      "source": "file:src/layouts/DefaultLayout.vue",
+      "target": "file:src/components/layout/Header.vue",
+      "type": "imports",
+      "label": "imports Header component"
+    },
+    {
+      "source": "file:src/layouts/DefaultLayout.vue",
+      "target": "file:src/components/layout/Sidebar.vue",
+      "type": "imports",
+      "label": "imports Sidebar component"
+    },
+    {
+      "source": "file:src/layouts/DefaultLayout.vue",
+      "target": "file:src/components/layout/Footer.vue",
+      "type": "imports",
+      "label": "imports Footer component"
+    },
+    {
+      "source": "file:src/components/layout/Sidebar.vue",
+      "target": "file:src/stores/auth.ts",
+      "type": "imports",
+      "label": "imports auth store"
+    },
+    {
+      "source": "file:src/components/layout/Sidebar.vue",
+      "target": "file:src/services/AuthService.ts",
+      "type": "imports",
+      "label": "imports AuthService for logout"
+    },
+    {
+      "source": "file:src/components/layout/Sidebar.vue",
+      "target": "file:src/services/DashboardService.ts",
+      "type": "imports",
+      "label": "imports DashboardService for statistics"
+    },
+    {
+      "source": "file:src/components/dashboard/DesktopDashboard.vue",
+      "target": "file:src/services/DashboardService.ts",
+      "type": "imports",
+      "label": "imports DashboardService for data"
+    },
+    {
+      "source": "file:src/components/dashboard/MobileDashboard.vue",
+      "target": "file:src/services/MobileDashboardService.ts",
+      "type": "imports",
+      "label": "imports MobileDashboardService for data"
+    },
+    {
+      "source": "file:src/services/AuthService.ts",
+      "target": "file:src/lib/supabase.ts",
+      "type": "imports",
+      "label": "imports Supabase client"
+    },
+    {
+      "source": "file:src/services/DashboardService.ts",
+      "target": "file:src/lib/supabase.ts",
+      "type": "imports",
+      "label": "imports Supabase client"
+    },
+    {
+      "source": "file:src/services/MobileDashboardService.ts",
+      "target": "file:src/lib/supabase.ts",
+      "type": "imports",
+      "label": "imports Supabase client"
+    },
+    {
+      "source": "file:src/services/ProductService.ts",
+      "target": "file:src/lib/supabase.ts",
+      "type": "imports",
+      "label": "imports Supabase client"
+    },
+    {
+      "source": "file:src/services/PartnerService.ts",
+      "target": "file:src/lib/supabase.ts",
+      "type": "imports",
+      "label": "imports Supabase client"
+    },
+    {
+      "source": "file:src/services/PaymentService.ts",
+      "target": "file:src/lib/supabase.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/services/ReturnService.ts",
+      "target": "file:src/lib/supabase.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/services/ShipmentService.ts",
+      "target": "file:src/lib/supabase.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/views/Dashboard.vue",
+      "target": "file:src/components/dashboard/DesktopDashboard.vue",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/views/Dashboard.vue",
+      "target": "file:src/components/dashboard/MobileDashboard.vue",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/views/Login.vue",
+      "target": "file:src/services/AuthService.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/views/partners/PartnerList.vue",
+      "target": "file:src/services/PartnerService.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/views/payments/PaymentList.vue",
+      "target": "file:src/services/PaymentService.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/views/products/ProductList.vue",
+      "target": "file:src/services/ProductService.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/views/returns/ReturnList.vue",
+      "target": "file:src/services/ReturnService.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/views/shipments/ShipmentList.vue",
+      "target": "file:src/services/ShipmentService.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/components/mobilechart/MobileAllProductQtyChart.vue",
+      "target": "config:package.json",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/mobilechart/MobileKpiCard.vue",
+      "target": "config:package.json",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/mobilechart/MobileRevenueAreaChart.vue",
+      "target": "config:package.json",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/mobilechart/MobileTopProductChart.vue",
+      "target": "config:package.json",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/mobilechart/MobileTopReturnProductChart.vue",
+      "target": "config:package.json",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "config:vite.config.ts",
+      "target": "config:package.json",
+      "type": "configures",
+      "weight": 1
+    },
+    {
+      "source": "config:tsconfig.app.json",
+      "target": "config:tsconfig.json",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "config:tsconfig.node.json",
+      "target": "config:tsconfig.json",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:index.html",
+      "target": "file:src/main.ts",
+      "type": "imports",
+      "weight": 1,
+      "notes": "HTML entry point imports Vue app from src/main.ts"
+    },
+    {
+      "source": "file:env.d.ts",
+      "target": "config:tsconfig.app.json",
+      "type": "documents",
+      "weight": 1,
+      "notes": "Provides type definitions for Vite environment variables used in app config"
+    },
+    {
+      "source": "config:vite.config.ts",
+      "target": "file:env.d.ts",
+      "type": "references",
+      "weight": 1,
+      "notes": "Vite config uses environment variables defined in env.d.ts"
+    },
+    {
+      "source": "pipeline:.github/workflows/deploy.yml",
+      "target": "config:package.json",
+      "type": "configures",
+      "weight": 1,
+      "notes": "CI/CD builds and packages dependencies from package.json"
+    },
+    {
+      "source": "pipeline:.github/workflows/deploy.yml",
+      "target": "resource:infra:.env",
+      "type": "references",
+      "weight": 1,
+      "notes": "Deployment pipeline injects secrets from .env into build process"
+    },
+    {
+      "source": "document:database-context.md",
+      "target": "table:schema:payments",
+      "type": "documents",
+      "weight": 1
+    },
+    {
+      "source": "document:database-context.md",
+      "target": "table:schema:products",
+      "type": "documents",
+      "weight": 1
+    },
+    {
+      "source": "document:database-context.md",
+      "target": "table:schema:shipments",
+      "type": "documents",
+      "weight": 1
+    },
+    {
+      "source": "document:database-context.md",
+      "target": "table:schema:returns",
+      "type": "documents",
+      "weight": 1
+    },
+    {
+      "source": "document:database-context.md",
+      "target": "table:schema:return_details",
+      "type": "documents",
+      "weight": 1
+    },
+    {
+      "source": "resource:data:payments_rows.sql",
+      "target": "table:schema:payments",
+      "type": "populates",
+      "weight": 1
+    },
+    {
+      "source": "resource:data:products_rows.sql",
+      "target": "table:schema:products",
+      "type": "populates",
+      "weight": 1
+    },
+    {
+      "source": "resource:data:returns_rows.sql",
+      "target": "table:schema:returns",
+      "type": "populates",
+      "weight": 1
+    },
+    {
+      "source": "resource:data:return_details_rows.sql",
+      "target": "table:schema:return_details",
+      "type": "populates",
+      "weight": 1
+    },
+    {
+      "source": "resource:data:shipments_rows.sql",
+      "target": "table:schema:shipments",
+      "type": "populates",
+      "weight": 1
+    },
+    {
+      "source": "table:schema:shipments",
+      "target": "table:schema:payments",
+      "type": "references",
+      "weight": 1,
+      "notes": "Shipments have FK to payments (payment_date, total_amount)"
+    },
+    {
+      "source": "table:schema:returns",
+      "target": "table:schema:shipments",
+      "type": "references",
+      "weight": 1,
+      "notes": "Returns reference shipments via shipment_id FK"
+    },
+    {
+      "source": "table:schema:return_details",
+      "target": "table:schema:returns",
+      "type": "references",
+      "weight": 1,
+      "notes": "Return details line items reference returns via return_id FK"
+    },
+    {
+      "source": "table:schema:return_details",
+      "target": "table:schema:products",
+      "type": "references",
+      "weight": 1,
+      "notes": "Return details reference products via product_id FK"
+    },
+    {
+      "source": "file:src/components/mobilechart/MobileAllProductQtyChart.vue",
+      "target": "table:schema:products",
+      "type": "renders",
+      "weight": 1,
+      "notes": "Component visualizes product quantity data from products table"
+    },
+    {
+      "source": "file:src/components/mobilechart/MobileTopProductChart.vue",
+      "target": "table:schema:products",
+      "type": "renders",
+      "weight": 1,
+      "notes": "Component displays top products by sales metrics"
+    },
+    {
+      "source": "file:src/components/mobilechart/MobileTopReturnProductChart.vue",
+      "target": "table:schema:returns",
+      "type": "renders",
+      "weight": 1,
+      "notes": "Component visualizes product return metrics"
+    },
+    {
+      "source": "file:src/components/mobilechart/MobileRevenueAreaChart.vue",
+      "target": "table:schema:shipments",
+      "type": "renders",
+      "weight": 1,
+      "notes": "Component displays shipment/revenue time-series trends"
+    },
+    {
+      "source": "document:README.md",
+      "target": "config:package.json",
+      "type": "documents",
+      "weight": 1,
+      "notes": "README references build commands and project setup"
+    },
+    {
+      "source": "config:.gitignore",
+      "target": "resource:infra:.env",
+      "type": "excludes",
+      "weight": 1,
+      "notes": ".gitignore prevents .env secrets from being committed"
+    },
+    {
+      "source": "file:src/App.vue",
+      "target": "file:src/router/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/views/Dashboard.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/views/products/ProductList.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/views/partners/PartnerList.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/views/shipments/ShipmentList.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/views/shipments/ShipmentForm.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/views/returns/ReturnList.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/views/returns/ReturnForm.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/views/payments/PaymentList.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/router/index.ts",
+      "target": "file:src/views/Login.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/layouts/DefaultLayout.vue",
+      "target": "file:src/components/layout/MobileNavbar.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/components/dashboard/DesktopDashboard.vue",
+      "target": "file:src/components/chart/AllProductQtyChart.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/components/dashboard/DesktopDashboard.vue",
+      "target": "file:src/components/chart/RevenueAreaChart.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/components/dashboard/DesktopDashboard.vue",
+      "target": "file:src/components/chart/TopProductChart.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/components/dashboard/DesktopDashboard.vue",
+      "target": "file:src/components/chart/TopReturnProductChart.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/components/dashboard/MobileDashboard.vue",
+      "target": "file:src/components/mobilechart/MobileAllProductQtyChart.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/components/dashboard/MobileDashboard.vue",
+      "target": "file:src/components/mobilechart/MobileRevenueAreaChart.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/components/dashboard/MobileDashboard.vue",
+      "target": "file:src/components/mobilechart/MobileTopProductChart.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/components/dashboard/MobileDashboard.vue",
+      "target": "file:src/components/mobilechart/MobileKpiCard.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/views/shipments/ShipmentList.vue",
+      "target": "file:src/views/shipments/ShipmentForm.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/views/shipments/ShipmentForm.vue",
+      "target": "file:src/services/ShipmentService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/views/returns/ReturnList.vue",
+      "target": "file:src/views/returns/ReturnForm.vue",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/views/returns/ReturnForm.vue",
+      "target": "file:src/services/ReturnService.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    },
+    {
+      "source": "file:src/views/Login.vue",
+      "target": "file:src/stores/auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7,
+      "recoveredFromImportMap": true
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:ui",
+      "name": "UI Layer",
+      "description": "Reusable components, page views, and layout templates for user interaction",
+      "nodeIds": [
+        "file:src/layouts/DefaultLayout.vue",
+        "file:src/layouts/AuthLayout.vue",
+        "file:src/components/layout/Header.vue",
+        "file:src/components/layout/Sidebar.vue",
+        "file:src/components/layout/Footer.vue",
+        "file:src/components/layout/MobileNavbar.vue",
+        "file:src/components/dashboard/DesktopDashboard.vue",
+        "file:src/components/dashboard/MobileDashboard.vue",
+        "file:src/views/Dashboard.vue",
+        "file:src/views/Login.vue",
+        "file:src/views/HomeView.vue",
+        "file:src/views/LainnyaView.vue",
+        "file:src/views/Shipments.vue",
+        "file:src/views/partners/PartnerList.vue",
+        "file:src/views/payments/PaymentList.vue",
+        "file:src/views/products/ProductList.vue",
+        "file:src/views/returns/ReturnForm.vue",
+        "file:src/views/returns/ReturnList.vue",
+        "file:src/views/shipments/ShipmentForm.vue",
+        "file:src/views/shipments/ShipmentList.vue",
+        "file:src/components/chart/AllProductQtyChart.vue",
+        "file:src/components/chart/ProductReturnBarChart.vue",
+        "file:src/components/chart/RevenueAreaChart.vue",
+        "file:src/components/chart/TopProductChart.vue",
+        "file:src/components/chart/TopReturnProductChart.vue",
+        "file:src/components/mobilechart/MobileAllProductQtyChart.vue",
+        "file:src/components/mobilechart/MobileKpiCard.vue",
+        "file:src/components/mobilechart/MobileRevenueAreaChart.vue",
+        "file:src/components/mobilechart/MobileTopProductChart.vue",
+        "file:src/components/mobilechart/MobileTopReturnProductChart.vue"
+      ]
+    },
+    {
+      "id": "layer:service",
+      "name": "Service Layer",
+      "description": "API clients, business logic, and state management (Pinia stores)",
+      "nodeIds": [
+        "file:src/stores/auth.ts",
+        "file:src/stores/counter.ts",
+        "file:src/stores/theme.ts",
+        "file:src/services/AuthService.ts",
+        "file:src/services/DashboardService.ts",
+        "file:src/services/MobileDashboardService.ts",
+        "file:src/services/ProductService.ts",
+        "file:src/services/PartnerService.ts",
+        "file:src/services/PaymentService.ts",
+        "file:src/services/ReturnService.ts",
+        "file:src/services/ShipmentService.ts"
+      ]
+    },
+    {
+      "id": "layer:config",
+      "name": "Config Layer",
+      "description": "Application entry points, routing configuration, and bootstrap setup",
+      "nodeIds": [
+        "file:src/main.ts",
+        "file:src/App.vue",
+        "file:src/router/index.ts",
+        "config:package.json",
+        "config:vite.config.ts",
+        "config:tsconfig.json",
+        "config:tsconfig.app.json",
+        "config:tsconfig.node.json"
+      ]
+    },
+    {
+      "id": "layer:integration",
+      "name": "Integration Layer",
+      "description": "Backend infrastructure and external service clients",
+      "nodeIds": [
+        "file:src/lib/supabase.ts",
+        "resource:infra:.env"
+      ]
+    },
+    {
+      "id": "layer:documentation",
+      "name": "Documentation Layer",
+      "description": "Project documentation and database schema references",
+      "nodeIds": [
+        "document:README.md",
+        "document:database-context.md",
+        "table:schema:payments",
+        "table:schema:products",
+        "table:schema:shipments",
+        "table:schema:returns",
+        "table:schema:return_details"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "Project Overview",
+      "description": "Start with the README to understand the project's purpose, development setup, and available npm scripts.",
+      "nodeIds": [
+        "document:README.md"
+      ],
+      "languageLesson": "Vue 3 with Vite and TypeScript: A modern, fast development environment"
+    },
+    {
+      "order": 2,
+      "title": "Application Bootstrap",
+      "description": "Explore main.ts, the entry point that initializes Vue app, Pinia store for auth state, and performs auth verification on startup.",
+      "nodeIds": [
+        "file:src/main.ts",
+        "file:src/stores/auth.ts"
+      ],
+      "languageLesson": "TypeScript modules: Entry point pattern with store initialization and side effects"
+    },
+    {
+      "order": 3,
+      "title": "Root Component & Router Setup",
+      "description": "App.vue is the root component that renders the router outlet. Router configuration in src/router/index.ts defines routes and protects them with auth guards.",
+      "nodeIds": [
+        "file:src/App.vue",
+        "file:src/router/index.ts"
+      ],
+      "languageLesson": "Vue Router: Authentication guards, route definitions, and lazy-loaded page components"
+    },
+    {
+      "order": 4,
+      "title": "Layout Structure",
+      "description": "DefaultLayout.vue provides the authenticated UI structure with Header, Sidebar, and Footer. This wraps most application pages and ensures consistent navigation.",
+      "nodeIds": [
+        "file:src/layouts/DefaultLayout.vue"
+      ],
+      "languageLesson": "Vue composition: Layout wrapper pattern for consistent UX across multiple pages"
+    },
+    {
+      "order": 5,
+      "title": "Authentication & Login",
+      "description": "Login.vue is the entry page for unauthenticated users. AuthService.ts handles Supabase authentication, and the auth store manages session state.",
+      "nodeIds": [
+        "file:src/views/Login.vue",
+        "file:src/services/AuthService.ts"
+      ],
+      "languageLesson": "Service pattern: Separation of concerns between UI (Login.vue) and business logic (AuthService)"
+    },
+    {
+      "order": 6,
+      "title": "Dashboard & Analytics",
+      "description": "Dashboard.vue displays analytics with KPI cards and charts. DashboardService fetches aggregated data from Supabase for overview metrics.",
+      "nodeIds": [
+        "file:src/views/Dashboard.vue",
+        "file:src/services/DashboardService.ts"
+      ],
+      "languageLesson": "Vue 3 components with TypeScript: Reactive data binding and lifecycle hooks for dashboard data"
+    },
+    {
+      "order": 7,
+      "title": "Product Management Module",
+      "description": "ProductList.vue displays products in a table with CRUD operations. ProductService.ts provides API calls to Supabase for product data management.",
+      "nodeIds": [
+        "file:src/views/products/ProductList.vue",
+        "file:src/services/ProductService.ts"
+      ],
+      "languageLesson": "CRUD pattern: List view with service layer abstraction for database operations"
+    },
+    {
+      "order": 8,
+      "title": "Partner Management Module",
+      "description": "PartnerList.vue manages partners/sellers. PartnerService.ts handles Supabase queries for partner data and relationships.",
+      "nodeIds": [
+        "file:src/views/partners/PartnerList.vue",
+        "file:src/services/PartnerService.ts"
+      ],
+      "languageLesson": "Modular architecture: Feature-based folder structure (partners/, products/, etc.)"
+    },
+    {
+      "order": 9,
+      "title": "Shipment Tracking Module",
+      "description": "ShipmentList.vue shows active shipments. ShipmentService.ts manages shipment lifecycle and status updates via Supabase.",
+      "nodeIds": [
+        "file:src/views/shipments/ShipmentList.vue",
+        "file:src/services/ShipmentService.ts"
+      ],
+      "languageLesson": "Real-time data: Service pattern for tracking order fulfillment and logistics"
+    },
+    {
+      "order": 10,
+      "title": "Payment Processing Module",
+      "description": "PaymentList.vue displays payment history and status. PaymentService.ts manages payment records and transaction data in Supabase.",
+      "nodeIds": [
+        "file:src/views/payments/PaymentList.vue",
+        "file:src/services/PaymentService.ts"
+      ],
+      "languageLesson": "Financial data handling: Service abstraction for sensitive transaction information"
+    },
+    {
+      "order": 11,
+      "title": "Return Requests Module",
+      "description": "ReturnList.vue and ReturnForm.vue handle return requests. ReturnService.ts manages return lifecycle from creation to resolution.",
+      "nodeIds": [
+        "file:src/views/returns/ReturnList.vue",
+        "file:src/services/ReturnService.ts"
+      ],
+      "languageLesson": "Form handling & state management: Multi-step workflows with service layer coordination"
+    },
+    {
+      "order": 12,
+      "title": "Supabase Integration",
+      "description": "supabase.ts initializes the Supabase client with environment configuration. All services import and use this client to query the backend database.",
+      "nodeIds": [
+        "file:src/lib/supabase.ts"
+      ],
+      "languageLesson": "Backend integration: Client initialization pattern and singleton pattern for shared connections"
+    },
+    {
+      "order": 13,
+      "title": "Database Schema",
+      "description": "database-context.md documents the Supabase schema including tables for products, partners, shipments, payments, and returns.",
+      "nodeIds": [
+        "document:database-context.md"
+      ],
+      "languageLesson": "Database design: Relational structure supporting multi-entity business domain"
+    },
+    {
+      "order": 14,
+      "title": "Project Configuration",
+      "description": "package.json defines dependencies (Vue 3, TypeScript, Supabase client, Pinia) and build scripts. Review to understand tech stack and tooling.",
+      "nodeIds": [
+        "config:package.json"
+      ],
+      "languageLesson": "Project metadata: Dependencies, scripts, and version management in modern JavaScript projects"
+    }
+  ]
+}

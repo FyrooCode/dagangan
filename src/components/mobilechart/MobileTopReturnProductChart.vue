@@ -7,7 +7,11 @@
       </h3>
     </div>
     <div class="card-body p-0 pb-4">
-      <div id="mobile_return_product_chart" style="height: 260px;"></div>
+      <div v-if="data && data.length > 0" id="mobile_return_product_chart" style="height: 260px;"></div>
+      <div v-else class="d-flex flex-column flex-center h-260px">
+        <i class="ki-outline ki-arrows-loop fs-3x text-gray-300 mb-2"></i>
+        <span class="text-gray-400 fw-bold fs-7">Belum ada data retur</span>
+      </div>
     </div>
   </div>
 </template>

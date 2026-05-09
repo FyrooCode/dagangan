@@ -64,6 +64,11 @@ const router = createRouter({
           name: 'lainnya',
           component: () => import('@/views/LainnyaView.vue'),
         },
+        {
+          path: 'rekap-bulanan',
+          name: 'rekap-bulanan',
+          component: () => import('@/views/reports/RekapBulanan.vue'),
+        },
       ],
     },
     {

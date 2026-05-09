@@ -1,8 +1,8 @@
 import { supabase } from '@/lib/supabase'
 
 export const mobileDashboardService = {
-  async getMobileDashboardData() {
-    const { data: shipments, error: shipmentError } = await supabase
+  async getMobileDashboardData(month?: number, year?: number) {
+    let query = supabase
       .from('shipments')
       .select(`
         id,
@@ -18,6 +18,32 @@ export const mobileDashboardService = {
         returns (return_details (quantity_returned, product_id))
       `)
 
+    if (month !== undefined && year !== undefined) {
+      const startMonth = String(month).padStart(2, '0')
+      const startDate = `${year}-${startMonth}-01`
+      
+      const lastDay = new Date(year, month, 0).getDate()
+      const endDate = `${year}-${startMonth}-${String(lastDay).padStart(2, '0')}T23:59:59.999`
+      
+      query = query.gte('shipment_date', startDate).lte('shipment_date', endDate)
+    }
+
+    const { data: shipments, error: shipmentError } = await query
+      .select(`
+        id,
+        shipment_date,
+        total_amount,
+        status,
+        shipment_details (
+          product_id,
+          unit_price_at_time,
+          quantity,
+          products (name)
+        ),
+        returns (return_details (quantity_returned, product_id)),
+        payments (amount_received, payment_date)
+      `)
+
     if (shipmentError) throw shipmentError
 
     let totalOmzet = 0
@@ -30,42 +56,63 @@ export const mobileDashboardService = {
     const productReturns: Record<string, number> = {}
 
     ;(shipments || []).forEach((item: any) => {
-      totalOmzet += Number(item.total_amount) || 0
+      const amount = Number(item.total_amount) || 0
+      totalOmzet += amount
 
       let returnAmount = 0
+      const currentShipmentReturns: Record<string, number> = {}
       if (item.returns) {
         item.returns.forEach((ret: any) => {
           ret.return_details?.forEach((rd: any) => {
             const price = item.shipment_details?.find((sd: any) => sd.product_id === rd.product_id)?.unit_price_at_time || 0
-            returnAmount += (rd.quantity_returned || 0) * price
+            const nominal = (rd.quantity_returned || 0) * price
+            returnAmount += nominal
+            
             const productName = item.shipment_details?.find((sd: any) => sd.product_id === rd.product_id)?.products?.name || 'Unknown'
             productReturns[productName] = (productReturns[productName] || 0) + (rd.quantity_returned || 0)
+            currentShipmentReturns[rd.product_id] = (currentShipmentReturns[rd.product_id] || 0) + (rd.quantity_returned || 0)
           })
         })
       }
 
-      const netAmount = (Number(item.total_amount) || 0) - returnAmount
-
-      if (item.status === 'paid') {
-        totalPendapatan += netAmount
-        item.shipment_details?.forEach((sd: any) => {
-          const name = sd.products?.name || 'Unknown'
-          productSalesValue[name] = (productSalesValue[name] || 0) + ((sd.quantity || 0) * (sd.unit_price_at_time || 0))
-          productQtySold[name] = (productQtySold[name] || 0) + (sd.quantity || 0)
-        })
-      } else {
-        totalPiutang += Math.max(netAmount, 0)
-      }
-
+      const netAmount = amount - returnAmount
       totalSisaUang += returnAmount
 
+      // Track Daily Omzet by Shipment Date in Local Timezone
       if (item.shipment_date) {
-        dailyTrend[item.shipment_date] = (dailyTrend[item.shipment_date] || 0) + netAmount
+        const d = new Date(item.shipment_date)
+        const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+        dailyTrend[dateStr] = (dailyTrend[dateStr] || 0) + amount
       }
+
+      // Handle Payments for this specific shipment
+      let shipmentReceived = 0
+      if (item.payments) {
+        item.payments.forEach((p: any) => {
+          const pAmount = Number(p.amount_received) || 0
+          shipmentReceived += pAmount
+          totalPendapatan += pAmount
+        })
+      }
+
+      totalPiutang += Math.max(netAmount - shipmentReceived, 0)
+
+      // Calculate product stats for this shipment, subtracting returns
+      item.shipment_details?.forEach((sd: any) => {
+        const name = sd.products?.name || 'Unknown'
+        const returnedQty = currentShipmentReturns[sd.product_id] || 0
+        const soldQty = Math.max((sd.quantity || 0) - returnedQty, 0)
+        
+        if (soldQty > 0) {
+          productSalesValue[name] = (productSalesValue[name] || 0) + (soldQty * (sd.unit_price_at_time || 0))
+          productQtySold[name] = (productQtySold[name] || 0) + soldQty
+        }
+      })
     })
 
     const countPending = (shipments || []).filter((item: any) => item.status !== 'paid').length
     const countLunas = (shipments || []).filter((item: any) => item.status === 'paid').length
+    const countTotal = (shipments || []).length
 
     const chartData = Object.keys(dailyTrend)
       .map(date => ({ x: new Date(date).getTime(), y: dailyTrend[date] ?? 0 }))
@@ -93,6 +140,7 @@ export const mobileDashboardService = {
       totalSisaUang,
       countPending,
       countLunas,
+      countTotal,
       chartData,
       topProductsValue,
       topReturns,

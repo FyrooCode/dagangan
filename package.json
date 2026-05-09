@@ -11,6 +11,9 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@pdfme/common": "^6.1.2",
+    "@pdfme/generator": "^6.1.2",
+    "@pdfme/schemas": "^6.1.2",
     "@supabase/supabase-js": "^2.99.1",
     "pinia": "^3.0.4",
     "vue": "^3.5.29",
