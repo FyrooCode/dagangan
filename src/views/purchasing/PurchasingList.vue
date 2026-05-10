@@ -115,7 +115,7 @@
                     <label class="fs-9 fw-bold text-muted text-uppercase d-block mb-1">Jumlah</label>
                     <input type="text" inputmode="decimal" 
                       :value="formatNumber(item.quantity)" 
-                      @input="e => item.quantity = parseNumber(e.target.value)"
+                      @input="e => item.quantity = parseNumber((e.target as HTMLInputElement).value)"
                       class="form-control form-control-sm fw-bolder fs-6 w-100" placeholder="0" required />
                   </div>
                   <div class="col-auto pt-6">
@@ -125,7 +125,7 @@
                     <label class="fs-9 fw-bold text-muted text-uppercase d-block mb-1">Harga Satuan</label>
                     <input type="text" inputmode="numeric" 
                       :value="formatNumber(item.cost_per_unit)" 
-                      @input="e => item.cost_per_unit = parseNumber(e.target.value)"
+                      @input="e => item.cost_per_unit = parseNumber((e.target as HTMLInputElement).value)"
                       class="form-control form-control-sm fw-bolder fs-6 w-100" placeholder="0" required />
                   </div>
                 </div>

@@ -121,7 +121,7 @@ onMounted(async () => {
     const years = Object.keys(periods).map(Number).sort((a, b) => b - a)
     availableYears.value = years
     
-    if (years.length > 0) {
+    if (years.length > 0 && years[0] !== undefined) {
       selectedYear.value = years[0]
       tempYear.value = years[0]
     }
@@ -139,7 +139,7 @@ function setTab(tab: string) {
 function openYearModal() {
   if (selectedYear.value !== 'Semua') {
     tempYear.value = selectedYear.value as number
-  } else if (availableYears.value.length > 0) {
+  } else if (availableYears.value.length > 0 && availableYears.value[0] !== undefined) {
     tempYear.value = availableYears.value[0]
   }
   filterModal.show()

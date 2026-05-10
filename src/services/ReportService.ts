@@ -28,7 +28,7 @@ export const reportService = {
     
     // Sort months descending for each year
     Object.keys(periods).forEach(y => {
-      periods[Number(y)].sort((a, b) => b - a)
+      periods[Number(y)]?.sort((a, b) => b - a)
     })
     
     return periods
