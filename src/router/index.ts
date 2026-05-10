@@ -69,6 +69,16 @@ const router = createRouter({
           name: 'rekap-bulanan',
           component: () => import('@/views/reports/RekapBulanan.vue'),
         },
+        {
+          path: 'purchasing',
+          name: 'purchasing',
+          component: () => import('@/views/purchasing/PurchasingList.vue'),
+        },
+        {
+          path: 'ingredients',
+          name: 'ingredients',
+          component: () => import('@/views/ingredients/IngredientList.vue'),
+        },
       ],
     },
     {

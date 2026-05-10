@@ -3,7 +3,7 @@ import { text, table } from '@pdfme/schemas'
 import type { Template } from '@pdfme/common'
 
 const formatRp = (val: number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(val)
-const formatDate = (date: string) => !date ? '-' : new Date(date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
+const formatDate = (date: string) => !date ? '-' : new Date(date).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' })
 
 export const exportRekapToPDF = async (reportData: any, periodName: string) => {
   const baseTableConfig = {
@@ -53,23 +53,33 @@ export const exportRekapToPDF = async (reportData: any, periodName: string) => {
   const template: Template = {
     basePdf: { width: 210, height: 297, padding: [15, 15, 20, 15] },
     schemas: [
-      // HALAMAN 1: Ringkasan Eksekutif
+      // HALAMAN 1: Ringkasan Eksekutif (Dashboard View)
       [
         ...createPageHeader('p1'),
         { name: 'summaryTitle', type: 'text', position: { x: 15, y: 35 }, width: 180, height: 8, fontSize: 14, fontColor: '#2c3e50' },
-        { 
-          name: 'summaryTable', 
-          type: 'table', 
-          position: { x: 15, y: 45 }, 
-          width: 180, 
-          height: 30,
-          ...baseTableConfig,
-          headWidthPercentages: [20, 20, 20, 20, 20],
-          columnStyles: {
-            0: { alignment: 'left' }, 1: { alignment: 'left' }, 2: { alignment: 'left' }, 3: { alignment: 'left' }, 4: { alignment: 'left' }
-          },
-          head: ['Total Pengiriman', 'Potongan Sisa', 'Tagihan Bersih', 'Kas Masuk', 'Sisa Piutang']
-        }
+        
+        // Metric 1: Pengiriman (Omzet)
+        { name: 'omzetLabel', type: 'text', position: { x: 15, y: 48 }, width: 85, height: 6, fontSize: 9, fontColor: '#ffffff', backgroundColor: '#2980ba', alignment: 'center', verticalAlignment: 'middle' },
+        { name: 'omzetValue', type: 'text', position: { x: 15, y: 54 }, width: 85, height: 16, fontSize: 16, fontColor: '#2c3e50', backgroundColor: '#f1f5f9', alignment: 'center', verticalAlignment: 'middle' },
+
+        // Metric 2: Retur
+        { name: 'returLabel', type: 'text', position: { x: 110, y: 48 }, width: 85, height: 6, fontSize: 9, fontColor: '#ffffff', backgroundColor: '#e74c3c', alignment: 'center', verticalAlignment: 'middle' },
+        { name: 'returValue', type: 'text', position: { x: 110, y: 54 }, width: 85, height: 16, fontSize: 16, fontColor: '#2c3e50', backgroundColor: '#fdf2f2', alignment: 'center', verticalAlignment: 'middle' },
+
+        // Metric 3: Tagihan Bersih
+        { name: 'netLabel', type: 'text', position: { x: 15, y: 78 }, width: 85, height: 6, fontSize: 9, fontColor: '#ffffff', backgroundColor: '#27ae60', alignment: 'center', verticalAlignment: 'middle' },
+        { name: 'netValue', type: 'text', position: { x: 15, y: 84 }, width: 85, height: 16, fontSize: 16, fontColor: '#2c3e50', backgroundColor: '#f0fdf4', alignment: 'center', verticalAlignment: 'middle' },
+
+        // Metric 4: Kas Masuk
+        { name: 'kasLabel', type: 'text', position: { x: 110, y: 78 }, width: 85, height: 6, fontSize: 9, fontColor: '#ffffff', backgroundColor: '#16a085', alignment: 'center', verticalAlignment: 'middle' },
+        { name: 'kasValue', type: 'text', position: { x: 110, y: 84 }, width: 85, height: 16, fontSize: 16, fontColor: '#2c3e50', backgroundColor: '#f1faf8', alignment: 'center', verticalAlignment: 'middle' },
+
+        // Metric 5: Piutang
+        { name: 'piutangLabel', type: 'text', position: { x: 15, y: 108 }, width: 180, height: 6, fontSize: 10, fontColor: '#ffffff', backgroundColor: '#f39c12', alignment: 'center', verticalAlignment: 'middle' },
+        { name: 'piutangValue', type: 'text', position: { x: 15, y: 114 }, width: 180, height: 18, fontSize: 20, fontColor: '#2c3e50', backgroundColor: '#fef9f1', alignment: 'center', verticalAlignment: 'middle' },
+
+        // Box for notes/info
+        { name: 'noteBox', type: 'text', position: { x: 15, y: 145 }, width: 180, height: 20, fontSize: 10, fontColor: '#7f8c8d', backgroundColor: '#f9f9f9', lineHeight: 1.4, padding: { top: 5, right: 5, bottom: 5, left: 5 } }
       ],
       // HALAMAN 2: Rincian Toko & Log Nota
       [
@@ -82,7 +92,7 @@ export const exportRekapToPDF = async (reportData: any, periodName: string) => {
           width: 180, 
           height: 30,
           ...baseTableConfig,
-          headWidthPercentages: [40, 20, 20, 20],
+          headWidthPercentages: [35, 22, 22, 21],
           columnStyles: {
             0: { alignment: 'left' }, 1: { alignment: 'left' }, 2: { alignment: 'left' }, 3: { alignment: 'left' }
           },
@@ -96,30 +106,27 @@ export const exportRekapToPDF = async (reportData: any, periodName: string) => {
           width: 180, 
           height: 30,
           ...baseTableConfig,
-          headWidthPercentages: [15, 15, 20, 15, 20, 15],
+          headWidthPercentages: [16, 12, 20, 18, 20, 14],
           columnStyles: {
             0: { alignment: 'left' }, 1: { alignment: 'left' }, 2: { alignment: 'left' }, 3: { alignment: 'left' }, 4: { alignment: 'left' }, 5: { alignment: 'left' }
           },
           head: ['Tgl Kirim', 'No Nota', 'Kirim Kotor', 'Retur', 'Terima Bersih', 'Status']
         }
       ],
-      // HALAMAN 3: Performa Produk
+      // HALAMAN 3: Performa Produk (Leaderboards View)
       [
         ...createPageHeader('p3'),
         { name: 'produkTitle', type: 'text', position: { x: 15, y: 35 }, width: 180, height: 8, fontSize: 14, fontColor: '#2c3e50' },
-        { 
-          name: 'produkTable', 
-          type: 'table', 
-          position: { x: 15, y: 45 }, 
-          width: 180, 
-          height: 30,
-          ...baseTableConfig,
-          headWidthPercentages: [35, 15, 15, 15, 20],
-          columnStyles: {
-            0: { alignment: 'left' }, 1: { alignment: 'center' }, 2: { alignment: 'center' }, 3: { alignment: 'center' }, 4: { alignment: 'left' }
-          },
-          head: ['Nama Produk', 'Dikirim', 'Diretur', 'Laku (Net)', 'Estimasi Nilai']
-        }
+        
+        { name: 'bestSellerTitle', type: 'text', position: { x: 15, y: 55 }, width: 180, height: 6, fontSize: 12, fontColor: '#27ae60' },
+        { name: 'best1', type: 'text', position: { x: 15, y: 65 }, width: 180, height: 14, fontSize: 11, backgroundColor: '#f0fdf4', verticalAlignment: 'middle', padding: { left: 5, right: 5 } },
+        { name: 'best2', type: 'text', position: { x: 15, y: 82 }, width: 180, height: 14, fontSize: 11, backgroundColor: '#f0fdf4', verticalAlignment: 'middle', padding: { left: 5, right: 5 } },
+        { name: 'best3', type: 'text', position: { x: 15, y: 99 }, width: 180, height: 14, fontSize: 11, backgroundColor: '#f0fdf4', verticalAlignment: 'middle', padding: { left: 5, right: 5 } },
+        
+        { name: 'worstTitle', type: 'text', position: { x: 15, y: 130 }, width: 180, height: 6, fontSize: 12, fontColor: '#e74c3c' },
+        { name: 'worst1', type: 'text', position: { x: 15, y: 140 }, width: 180, height: 14, fontSize: 11, backgroundColor: '#fdf2f2', verticalAlignment: 'middle', padding: { left: 5, right: 5 } },
+        { name: 'worst2', type: 'text', position: { x: 15, y: 157 }, width: 180, height: 14, fontSize: 11, backgroundColor: '#fdf2f2', verticalAlignment: 'middle', padding: { left: 5, right: 5 } },
+        { name: 'worst3', type: 'text', position: { x: 15, y: 174 }, width: 180, height: 14, fontSize: 11, backgroundColor: '#fdf2f2', verticalAlignment: 'middle', padding: { left: 5, right: 5 } },
       ]
     ]
   }
@@ -128,15 +135,6 @@ export const exportRekapToPDF = async (reportData: any, periodName: string) => {
   const currentPrintDate = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
   const periodText = `Periode: ${periodName}\nDicetak: ${currentPrintDate}`
   const compAddress = "Sistem Dagangan\nAplikasi Rekapitulasi Otomatis\nDivisi Keuangan & Logistik"
-
-  // 1. Summary Data
-  const summaryRows = [[
-    formatRp(reportData.ringkasan.total_pengiriman),
-    formatRp(reportData.ringkasan.total_potongan_sisa),
-    formatRp(reportData.ringkasan.tagihan_bersih),
-    formatRp(reportData.ringkasan.kas_masuk),
-    formatRp(reportData.ringkasan.sisa_piutang)
-  ]]
 
   const noteText = `Catatan Laporan:\nLaporan ini merangkum total pergerakan barang dan uang untuk periode pengiriman ${periodName}. Nilai Tagihan Bersih didapat setelah dikurangi barang yang diretur/sisa.`
 
@@ -158,21 +156,33 @@ export const exportRekapToPDF = async (reportData: any, periodName: string) => {
     n.status === 'paid' || n.status === 'LUNAS' ? 'LUNAS' : 'PENDING'
   ])
 
-  // 4. Produk Data
-  const produkRows = reportData.performa_produk.map((p: any) => [
-    p.nama_produk,
-    String(p.dikirim),
-    String(p.diretur),
-    String(p.laku_net),
-    formatRp(p.estimasi_nilai)
-  ])
+  // 4. Produk Data (Sort for Top 3)
+  const allProducts = reportData.performa_produk || []
+  const topTerlaris = [...allProducts].sort((a, b) => b.estimasi_nilai - a.estimasi_nilai).slice(0, 3)
+  const topRetur = [...allProducts].sort((a, b) => b.diretur - a.diretur).slice(0, 3)
+
+  const formatProductRow = (prod: any, type: 'omzet' | 'retur', rank: number) => {
+    if (!prod) return '-'
+    if (type === 'omzet') return `#${rank}   ${prod.nama_produk}   |   Terjual: ${prod.laku_net} pcs   |   Estimasi Omzet: ${formatRp(prod.estimasi_nilai)}`
+    return `#${rank}   ${prod.nama_produk}   |   Dikembalikan: ${prod.diretur} pcs`
+  }
 
   // Provide inputs to template
   const inputs = [{
     // Page 1
     compName_p1: 'DAGANGAN', docType_p1: 'BUKU REKAPITULASI', periodInfo_p1: periodText, divider_p1: '',
     summaryTitle: 'Ringkasan Eksekutif & Arus Kas',
-    summaryTable: JSON.stringify(summaryRows),
+    omzetLabel: 'TOTAL PENGIRIMAN (KOTOR)',
+    omzetValue: formatRp(reportData.ringkasan.total_pengiriman),
+    returLabel: 'TOTAL POTONGAN SISA',
+    returValue: formatRp(reportData.ringkasan.total_potongan_sisa),
+    netLabel: 'TAGIHAN BERSIH',
+    netValue: formatRp(reportData.ringkasan.tagihan_bersih),
+    kasLabel: 'KAS MASUK (DITERIMA)',
+    kasValue: formatRp(reportData.ringkasan.kas_masuk),
+    piutangLabel: 'SISA PIUTANG (GANTUNG)',
+    piutangValue: formatRp(reportData.ringkasan.sisa_piutang),
+    noteBox: noteText,
     
     // Page 2
     compName_p2: 'DAGANGAN', docType_p2: 'BUKU REKAPITULASI', periodInfo_p2: periodText, divider_p2: '',
@@ -183,8 +193,15 @@ export const exportRekapToPDF = async (reportData: any, periodName: string) => {
     
     // Page 3
     compName_p3: 'DAGANGAN', docType_p3: 'BUKU REKAPITULASI', periodInfo_p3: periodText, divider_p3: '',
-    produkTitle: 'Performa & Pergerakan Produk',
-    produkTable: JSON.stringify(produkRows.length > 0 ? produkRows : [['-', '-', '-', '-', '-']])
+    produkTitle: 'Sorotan Performa Produk',
+    bestSellerTitle: 'Top 3 Produk Terlaris (Berdasarkan Nilai Net)',
+    best1: formatProductRow(topTerlaris[0], 'omzet', 1),
+    best2: formatProductRow(topTerlaris[1], 'omzet', 2),
+    best3: formatProductRow(topTerlaris[2], 'omzet', 3),
+    worstTitle: 'Top 3 Produk Paling Banyak Diretur',
+    worst1: formatProductRow(topRetur[0], 'retur', 1),
+    worst2: formatProductRow(topRetur[1], 'retur', 2),
+    worst3: formatProductRow(topRetur[2], 'retur', 3),
   }]
 
   try {

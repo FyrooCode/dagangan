@@ -2,6 +2,9 @@
   <div id="kt_app_toolbar" class="app-toolbar py-4">
     <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
       <div class="d-flex align-items-center">
+        <router-link to="/lainnya" class="btn btn-sm btn-icon btn-primary me-3 shadow-sm">
+          <i class="ki-outline ki-arrow-left fs-2 text-white"></i>
+        </router-link>
         <h1 class="text-gray-900 fw-bolder fs-2 mb-0">Rekap Bulanan</h1>
       </div>
     </div>
@@ -10,40 +13,47 @@
   <div id="kt_app_content" class="app-content flex-column-fluid pt-0">
     <div id="kt_app_content_container" class="app-container container-xxl">
       
-      <!-- Filter bar -->
-      <div class="p-1 bg-gray-100 rounded-pill d-flex mb-8 shadow-sm border border-gray-200" style="height: 52px;">
-        <button @click="setTab('all')" class="btn flex-grow-1 d-flex align-items-center justify-content-center fw-bolder fs-6 transition-all rounded-pill border-0" :class="activeTab === 'all' ? 'bg-primary text-white shadow' : 'text-gray-600'">
-          Semua
-        </button>
-        <button @click="openYearModal" class="btn flex-grow-1 d-flex align-items-center justify-content-center fw-bolder fs-6 transition-all rounded-pill border-0" :class="activeTab === 'filtered' ? 'bg-primary text-white shadow' : 'text-gray-600'">
-          {{ activeTab === 'filtered' ? 'Tahun ' + selectedYear : 'Filter Tahun' }}
-        </button>
+      <div v-if="loading" class="text-center py-20">
+        <span class="spinner-border text-primary"></span>
+        <div class="text-gray-500 mt-3 fw-bold">Memuat data laporan...</div>
       </div>
 
-      <div class="row g-5">
-        <div v-for="monthData in filteredMonths" :key="monthData.key" class="col-12 col-md-6 col-xl-4">
-          <div class="card shadow-sm border border-gray-200">
-            <div class="card-header collapsible cursor-pointer rotate" data-bs-toggle="collapse" :data-bs-target="'#kt_docs_card_collapsible_' + monthData.key">
-                <h3 class="card-title">{{ monthData.label }}</h3>
-                <div class="card-toolbar rotate-180">
-                    <i class="ki-duotone ki-down fs-1"></i>
-                </div>
-            </div>
-            <div :id="'kt_docs_card_collapsible_' + monthData.key" class="collapse">
-                <div class="card-body">
-                    <p class="text-gray-600 mb-0">
-                      Cetak laporan rekapitulasi pengiriman, potongan sisa, dan performa produk untuk {{ monthData.label }}.
-                    </p>
-                </div>
-                <div class="card-footer d-flex gap-3">
-                    <button class="btn btn-danger btn-sm fw-bold shadow-sm d-flex align-items-center" @click="handleExportPDF(monthData)" :disabled="exporting[monthData.key]">
-                      <span v-if="exporting[monthData.key]" class="spinner-border spinner-border-sm me-2"></span>
-                      <i v-else class="ki-outline ki-file fs-3 me-1"></i> Cetak PDF
-                    </button>
-                    <button class="btn btn-success btn-sm fw-bold shadow-sm d-flex align-items-center" disabled title="Coming Soon">
-                      <i class="ki-outline ki-file-sheet fs-3 me-1"></i> Excel
-                    </button>
-                </div>
+      <div v-else>
+        <!-- Filter bar -->
+        <div class="p-1 bg-gray-100 rounded-pill d-flex mb-8 shadow-sm border border-gray-200" style="height: 52px;">
+          <button @click="setTab('all')" class="btn flex-grow-1 d-flex align-items-center justify-content-center fw-bolder fs-6 transition-all rounded-pill border-0" :class="activeTab === 'all' ? 'bg-primary text-white shadow' : 'text-gray-600'">
+            Semua
+          </button>
+          <button @click="openYearModal" class="btn flex-grow-1 d-flex align-items-center justify-content-center fw-bolder fs-6 transition-all rounded-pill border-0" :class="activeTab === 'filtered' ? 'bg-primary text-white shadow' : 'text-gray-600'">
+            {{ activeTab === 'filtered' ? 'Tahun ' + selectedYear : 'Filter Tahun' }}
+          </button>
+        </div>
+
+        <div class="row g-5">
+          <div v-for="monthData in filteredMonths" :key="monthData.key" class="col-12 col-md-6 col-xl-4">
+            <div class="card shadow-sm border border-gray-200">
+              <div class="card-header collapsible cursor-pointer rotate" data-bs-toggle="collapse" :data-bs-target="'#kt_docs_card_collapsible_' + monthData.key">
+                  <h3 class="card-title">{{ monthData.label }}</h3>
+                  <div class="card-toolbar rotate-180">
+                      <i class="ki-duotone ki-down fs-1"></i>
+                  </div>
+              </div>
+              <div :id="'kt_docs_card_collapsible_' + monthData.key" class="collapse">
+                  <div class="card-body">
+                      <p class="text-gray-600 mb-0">
+                        Cetak laporan rekapitulasi pengiriman, potongan sisa, dan performa produk untuk {{ monthData.label }}.
+                      </p>
+                  </div>
+                  <div class="card-footer d-flex gap-3">
+                      <button class="btn btn-danger btn-sm fw-bold shadow-sm d-flex align-items-center" @click="handleExportPDF(monthData)" :disabled="exporting[monthData.key]">
+                        <span v-if="exporting[monthData.key]" class="spinner-border spinner-border-sm me-2"></span>
+                        <i v-else class="ki-outline ki-file fs-3 me-1"></i> Cetak PDF
+                      </button>
+                      <button class="btn btn-success btn-sm fw-bold shadow-sm d-flex align-items-center" disabled title="Coming Soon">
+                        <i class="ki-outline ki-file-sheet fs-3 me-1"></i> Excel
+                      </button>
+                  </div>
+              </div>
             </div>
           </div>
         </div>
